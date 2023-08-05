@@ -5,7 +5,7 @@ const controller = require('./controller');
 router.get('/subjects', (req, res) => {
   controller.getSubjects((err, subjects) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to fetch subjects' });
+      res.status(500).json({ error: 'Failed to fetch subjects' });
     } else {
       res.json(subjects);
     }
@@ -17,9 +17,9 @@ router.get('/subjects/:id', (req, res) => {
   controller.getSubject(id, (err, subject) => {
     if (err) {
       if (err.message === 'Subject not found') {
-        return res.status(404).json({ error: 'Subject not found' });
+        res.status(404).json({ error: 'Subject not found' });
       } else {
-        return res.status(500).json({ error: 'Failed to fetch subject' });
+        res.status(500).json({ error: 'Failed to fetch subject' });
       }
     } else {
       res.json(subject);
