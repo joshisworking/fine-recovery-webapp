@@ -99,25 +99,10 @@ const updateCourthouse = (courthouse, callback) => {
   );
 };
 
-const courthouseExists = courthouseId => {
-  sql = 'SELECT COUNT(*) FROM Courthouse WHERE CourthouseId = ?;';
-  db.query(sql, courthouseId, (err, results) => {
-    if (err) {
-      console.log('Error executing query: ', err);
-      return null;
-    } else if (results.length === 0) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-};
-
 module.exports = {
   getCourthouses,
   getCourthouse,
   addCourthouse,
   deleteCourthouse,
   updateCourthouse,
-  courthouseExists,
 };

@@ -1,11 +1,12 @@
+-- User data
 INSERT INTO `USER` (`Username`, `Email`)
 VALUES
   ('JohnDoe', 'john.doe@example.com'),
   ('JaneSmith', 'jane.smith@example.com'),
   ('AlexBrown', 'alex.brown@example.com');
 
-    
 
+-- Courthouse data
 INSERT INTO `COURTHOUSE` (`Name`, `City`, `Province`)
 VALUES
   ('Justice Central Courthouse', 'Metropolis', 'ON'),
@@ -14,7 +15,8 @@ VALUES
   ('Unity Municipal Courthouse', 'Harmonyville', 'QC'),
   ('Prosperity Circuit Courthouse', 'Prospect City', 'NS');
 
-    
+
+-- Subject data
 INSERT INTO `SUBJECT` (`Name`, `DOB`)
 VALUES
   ('Michael Johnson', '1990-05-15'),
