@@ -12,20 +12,6 @@ router.get('/fine', (req, res) => {
   });
 });
 
-router.get('/fine/fine/:id', (req, res) => {
-  controller.getFine(req.params.id, (err, fine) => {
-    if (err) {
-      if (err.message === 'Fine not found') {
-        res.status(404).json({ message: 'Fine not found' });
-      } else {
-        res.status(500).json({ error: 'Failed to fetch fine' });
-      }
-    } else {
-      res.json(fine);
-    }
-  });
-});
-
 router.get('/fine/overdue', (req, res) => {
   controller.getFinesOverdue((err, results) => {
     if (err) {
@@ -79,7 +65,21 @@ router.post('/fine', (req, res) => {
   });
 });
 
-router.delete('/fine/fine/:id', (req, res) => {
+router.get('/fine/:id', (req, res) => {
+  controller.getFine(req.params.id, (err, fine) => {
+    if (err) {
+      if (err.message === 'Fine not found') {
+        res.status(404).json({ message: 'Fine not found' });
+      } else {
+        res.status(500).json({ error: 'Failed to fetch fine' });
+      }
+    } else {
+      res.json(fine);
+    }
+  });
+});
+
+router.delete('/fine/:id', (req, res) => {
   controller.deleteFine(req.params.id, err => {
     if (err) {
       if (err.message === 'Fine not found') {
@@ -93,7 +93,7 @@ router.delete('/fine/fine/:id', (req, res) => {
   });
 });
 
-router.put('/fine/fine/:id', (req, res) => {
+router.put('/fine/:id', (req, res) => {
   const fine = req.body;
   controller.updateFine(fine, err => {
     if (err) {

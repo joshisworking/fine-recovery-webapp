@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
 
-router.get('/subjects', (req, res) => {
+router.get('/subject', (req, res) => {
   controller.getSubjects((err, subjects) => {
     if (err) {
       res.status(500).json({ error: 'Failed to fetch subjects' });
@@ -12,7 +12,7 @@ router.get('/subjects', (req, res) => {
   });
 });
 
-router.get('/subjects/:id', (req, res) => {
+router.get('/subject/:id', (req, res) => {
   const id = req.params.id;
   controller.getSubject(id, (err, subject) => {
     if (err) {
@@ -27,7 +27,7 @@ router.get('/subjects/:id', (req, res) => {
   });
 });
 
-router.post('/subjects', (req, res) => {
+router.post('/subject', (req, res) => {
   const subject = req.body;
   controller.addSubject(subject, (err, subjectID) => {
     if (err) {
@@ -38,7 +38,7 @@ router.post('/subjects', (req, res) => {
   });
 });
 
-router.delete('/subjects/:id', (req, res) => {
+router.delete('/subject/:id', (req, res) => {
   id = req.params.id;
 
   controller.deleteSubject(id, err => {
