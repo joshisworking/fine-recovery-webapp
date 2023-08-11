@@ -1,4 +1,18 @@
-const fines = 'SELECT * FROM FINE;';
+const fines = `
+  SELECT 
+    FINE.FineId,  
+    FINE.Amount,
+    FINE.Date,
+    FINE.CourtFile,
+    COURTHOUSE.Name as CourthouseName,
+    SUBJECT.Name as SubjectName,
+    FINE.DatePaid
+  FROM FINE
+  LEFT JOIN COURTHOUSE
+    ON Fine.CourthouseId = COURTHOUSE.CourthouseId
+  LEFT JOIN SUBJECT 
+    ON FINE.SubjectID = SUBJECT.SubjectID
+  ;`;
 
 const fineById = 'SELECT * FROM FINE WHERE FineID = ?;';
 

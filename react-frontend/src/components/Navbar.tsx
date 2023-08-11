@@ -10,36 +10,50 @@ const Navbar: React.FC = () => {
     isActive: boolean;
     isPending: boolean;
   }) => {
-    return isPending ? 'pending' : isActive ? 'active' : '';
+    return isPending
+      ? 'nav-link pending'
+      : isActive
+      ? 'nav-link active'
+      : 'nav-link';
   };
 
   return (
     <>
-      <nav>
-        <ul>
-          <li>
-            <NavLink
-              to="/"
-              className={getNavLinkClassName}>
-              Fines
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/subjects"
-              className={getNavLinkClassName}>
-              Subjects
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/courthouses"
-              className={getNavLinkClassName}>
-              Courthouses
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
+      <div className="header">
+        <a
+          href="/"
+          className="logo-link">
+          <svg className="logo">
+            <use href="/sprites.svg#inbox" />
+          </svg>
+          {/* "Archive, inbox Icon" by Afrian E. Prasetyo from Icon-icons.com is licensed under CC BY 4.0. To view a copy of the license, visit https://creativecommons.org/licenses/by/4.0 */}
+        </a>
+        <nav>
+          <ul className="nav-list">
+            <li className="nav-item">
+              <NavLink
+                to="/"
+                className={getNavLinkClassName}>
+                Fines
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                to="/subjects"
+                className={getNavLinkClassName}>
+                Subjects
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                to="/courthouses"
+                className={getNavLinkClassName}>
+                Courthouses
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
       <Outlet />
     </>
   );

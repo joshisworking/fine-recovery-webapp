@@ -1,26 +1,95 @@
-nav {
-  padding: 10px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
 }
 
-ul {
-  list-style: none;
+/* Header styling */
+.header {
   display: flex;
+  align-items: center;
+  background-color: #87ade6;
+  padding: 20px;
+  color: #fff;
+  font-size: 1.3em;
 }
 
-li {
+/* Logo styling */
+.logo-link {
+  display: inline-block;
   margin-right: 20px;
 }
 
-a {
-  text-decoration: none;
-  color: #333;
+.logo {
+  width: 35px;
+  height: 35px;
+  vertical-align: middle;
+  fill: #1c3861;
 }
 
-a:hover {
-  color: #2500dd;
+/* Navigation styling */
+.nav {
+  flex-grow: 1;
+}
+
+.nav-list {
+  display: flex;
+}
+
+.nav-item {
+  margin-right: 20px;
+  list-style: none;
+}
+
+.nav-link {
+  color: #333;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #fff;
 }
 
 .active {
-  color: #2500dd;
+  color: #fff;
+}
+
+table {
+  width: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr {
+  background-color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #ccc;
+}
+
+td,
+th {
+  padding: 5px;
+  border: 1px solid black;
+  text-align: center;
+  position: relative;
+}
+
+.table-button {
+  /* display: none; */
+  position: absolute;
+}
+
+.table-button:hover {
+  display: block;
+}
+
+/* Mobile */
+@media screen and (max-width: 400px) {
+  .header {
+    font-size: 1.1em;
+  }
 }

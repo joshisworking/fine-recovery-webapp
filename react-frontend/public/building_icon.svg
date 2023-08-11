@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    <g id="_20_building-08" data-name="20 building-08">
+      <rect x="3" y="27" width="26" height="2"/>
+      <path d="M26,12H6a1,1,0,0,1-.57-1.82l10-7a1,1,0,0,1,1.14,0l10,7A1,1,0,0,1,26,12ZM9.17,10H22.83L16,5.22Z"/>
+      <path d="M26,29H6a1,1,0,0,1-1-1V25a1,1,0,0,1,1-1H26a1,1,0,0,1,1,1v3A1,1,0,0,1,26,29ZM7,27H25V26H7Z"/>
+      <path d="M26,15H6a1,1,0,0,1-1-1V11a1,1,0,0,1,1-1H26a1,1,0,0,1,1,1v3A1,1,0,0,1,26,15ZM7,13H25V12H7Z"/>
+      <rect x="15" y="14" width="2" height="11"/>
+      <rect x="11" y="14" width="2" height="11"/>
+      <rect x="19" y="14" width="2" height="11"/>
+      <rect x="7" y="14" width="2" height="11"/>
+      <rect x="23" y="14" width="2" height="11"/>
+    </g>
+  </svg>
