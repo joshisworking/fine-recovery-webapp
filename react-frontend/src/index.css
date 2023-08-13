@@ -64,6 +64,7 @@ table {
 
 tr {
   background-color: #fff;
+  position: relative;
 }
 
 tr:nth-child(even) {
@@ -79,12 +80,28 @@ th {
 }
 
 .table-button {
-  /* display: none; */
+  display: none;
   position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  justify-content: center;
+  align-items: center;
+  background-color: #87ade6;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+tr:hover .table-button {
+  display: flex;
 }
 
 .table-button:hover {
-  display: block;
+  background-color: #4b6a99;
 }
 
 /* Mobile */

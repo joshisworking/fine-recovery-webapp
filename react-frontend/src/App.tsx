@@ -1,8 +1,9 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Fines from './components/fines/Fines';
+import Fines from './components/Fines';
+import FineDetails from './components/FineDetails';
 import Subjects from './components/Subjects';
-import Courthouses from './components/courthouses/Courthouses';
+import Courthouses from './components/Courthouses';
 
 const router = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Fines />,
+      },
+      {
+        path: '/fine',
+        element: <FineDetails />,
       },
       {
         path: '/courthouses',

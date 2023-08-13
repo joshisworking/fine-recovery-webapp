@@ -21,7 +21,7 @@ const getFine = (id, callback) => {
       if (results.length === 0) {
         callback(new Error('Fine not found'), null);
       } else {
-        callback(null, results);
+        callback(null, results[0]);
       }
     }
   });

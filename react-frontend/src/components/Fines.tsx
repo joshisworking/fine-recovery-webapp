@@ -1,12 +1,6 @@
-import React, {
-  useState,
-  useEffect,
-  MouseEventHandler,
-  createElement,
-} from 'react';
-// import styles from './Fines.module.css'; // Import the CSS module
+import React, { useState, useEffect } from 'react';
 
-type Fine = {
+export type Fine = {
   FineId: number;
   Amount: number;
   Date: string;
@@ -34,6 +28,10 @@ const Fines: React.FC = () => {
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
+  const handleOnClick = (fineId: number) => {
+    console.log(fineId);
+  };
+
   return (
     <div className="table-container">
       <table>
@@ -51,7 +49,14 @@ const Fines: React.FC = () => {
         <tbody>
           {fines.map(fine => (
             <tr key={fine.FineId}>
-              <td>{fine.FineId}</td>
+              <td>
+                <button
+                  className="table-button"
+                  onClick={() => handleOnClick(fine.FineId)}>
+                  Edit
+                </button>
+                {fine.FineId}
+              </td>
               <td>${fine.Amount}</td>
               <td>{fine.Date}</td>
               <td>{fine.CourtFile}</td>
