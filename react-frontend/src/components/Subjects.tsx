@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 type Subject = {
-  SubjectID: number;
+  SubjectId: number;
   Name: string;
   DOB: string;
 };
@@ -34,8 +34,8 @@ const Subjects: React.FC = () => {
         </thead>
         <tbody>
           {subjects.map(subject => (
-            <tr key={subject.SubjectID}>
-              <td>{subject.SubjectID}</td>
+            <tr key={subject.SubjectId}>
+              <td>{subject.SubjectId}</td>
               <td>{subject.Name}</td>
               <td>{subject.DOB}</td>
             </tr>

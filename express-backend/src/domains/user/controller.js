@@ -13,7 +13,7 @@ const getUsers = callback => {
 };
 
 const getUser = (userId, callback) => {
-  const sql = 'SELECT * FROM USER WHERE UserID = ?';
+  const sql = 'SELECT * FROM USER WHERE UserId = ?';
   db.query(sql, [userId], (err, result) => {
     if (err) {
       console.error('Error executing the query:', err.message);
@@ -46,7 +46,7 @@ const addUser = (user, callback) => {
 };
 
 const deleteUser = (userId, callback) => {
-  const sql = 'DELETE FROM USER WHERE UserID = ?;';
+  const sql = 'DELETE FROM USER WHERE UserId = ?;';
   db.query(sql, [userId], (err, result) => {
     if (err) {
       console.error('Error executing deletion:', err.message);

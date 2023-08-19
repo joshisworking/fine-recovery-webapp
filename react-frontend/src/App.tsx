@@ -15,6 +15,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/fine',
+        element: <Fines />,
+      },
+      {
+        path: '/fine/:id',
         element: <FineDetails />,
       },
       {

@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import setTitle from '../utils/setTitle';
 
 export type Fine = {
   FineId: number;
   Amount: number;
   Date: string;
   CourtFile: string;
+  CourthouseId: number;
   CourthouseName: string;
+  SubjectId: number;
   SubjectName: string;
   DatePaid: string | null;
 };
 
 const Fines: React.FC = () => {
+  setTitle('Fines');
   const [fines, setFines] = useState<Fine[]>([]);
-
-  // Set page title
-  useEffect(() => {
-    document.title = 'Fines';
-  });
 
   // Obtain fine data
   useEffect(() => {
@@ -27,10 +27,6 @@ const Fines: React.FC = () => {
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
-
-  const handleOnClick = (fineId: number) => {
-    console.log(fineId);
-  };
 
   return (
     <div className="table-container">
@@ -50,11 +46,11 @@ const Fines: React.FC = () => {
           {fines.map(fine => (
             <tr key={fine.FineId}>
               <td>
-                <button
-                  className="table-button"
-                  onClick={() => handleOnClick(fine.FineId)}>
+                <Link
+                  className="table-edit-link"
+                  to={'/fine/' + fine.FineId}>
                   Edit
-                </button>
+                </Link>
                 {fine.FineId}
               </td>
               <td>${fine.Amount}</td>

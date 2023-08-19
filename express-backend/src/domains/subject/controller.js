@@ -13,7 +13,7 @@ const getSubjects = callback => {
 };
 
 const getSubject = (id, callback) => {
-  const sql = 'SELECT * FROM Subject WHERE SubjectID = ?';
+  const sql = 'SELECT * FROM Subject WHERE SubjectId = ?';
   db.query(sql, id, (err, results) => {
     if (err) {
       console.error('Error executing the query:', err.message);
@@ -42,7 +42,7 @@ const addSubject = (subject, callback) => {
 };
 
 const deleteSubject = (id, callback) => {
-  const sql = 'DELETE FROM Subject WHERE SubjectID = ?';
+  const sql = 'DELETE FROM Subject WHERE SubjectId = ?';
   db.query(sql, id, (err, result) => {
     if (err) {
       console.error('Error executing deletion:', err.message);

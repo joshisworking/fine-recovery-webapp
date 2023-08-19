@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
           <ul className="nav-list">
             <li className="nav-item">
               <NavLink
-                to="/"
+                to="/fine"
                 className={getNavLinkClassName}>
                 Fines
               </NavLink>

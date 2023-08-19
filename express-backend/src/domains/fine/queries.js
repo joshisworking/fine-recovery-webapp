@@ -4,20 +4,39 @@ const fines = `
     FINE.Amount,
     FINE.Date,
     FINE.CourtFile,
+    COURTHOUSE.CourthouseId,
     COURTHOUSE.Name as CourthouseName,
+    SUBJECT.SubjectId,
     SUBJECT.Name as SubjectName,
     FINE.DatePaid
   FROM FINE
   LEFT JOIN COURTHOUSE
     ON Fine.CourthouseId = COURTHOUSE.CourthouseId
   LEFT JOIN SUBJECT 
-    ON FINE.SubjectID = SUBJECT.SubjectID
+    ON FINE.SubjectId = SUBJECT.SubjectId
   ;`;
 
-const fineById = 'SELECT * FROM FINE WHERE FineID = ?;';
+const fineById = `
+  SELECT
+    FINE.FineId,  
+    FINE.Amount,
+    FINE.Date,
+    FINE.CourtFile,
+    COURTHOUSE.CourthouseId,
+    COURTHOUSE.Name as CourthouseName,
+    SUBJECT.SubjectId,
+    SUBJECT.Name as SubjectName,
+    FINE.DatePaid 
+  FROM FINE
+  LEFT JOIN COURTHOUSE
+    ON Fine.CourthouseId = COURTHOUSE.CourthouseId
+  LEFT JOIN SUBJECT 
+    ON FINE.SubjectId = SUBJECT.SubjectId
+  WHERE FINE.FineId = ?;
+`;
 
 const addFine = `
-  INSERT INTO FINE (Amount, Date, CourtFile, CourthouseID, SubjectID)
+  INSERT INTO FINE (Amount, Date, CourtFile, CourthouseId, SubjectId)
   VALUES (?, ?, ?, ?, ?);
 `;
 
@@ -35,32 +54,32 @@ const updateFine = `
 const deleteFine = 'DELETE FROM FINE WHERE FineId = ?;';
 
 const finesBySubjectId = `
-  SELECT FINE.FineID, FINE.Amount, FINE.Date, FINE.CourtFile,
-    COURTHOUSE.CourthouseID, COURTHOUSE.City,
+  SELECT FINE.FineId, FINE.Amount, FINE.Date, FINE.CourtFile,
+    COURTHOUSE.CourthouseId, COURTHOUSE.City,
     SUBJECT.Name AS SubjectName
   FROM FINE
-  LEFT JOIN COURTHOUSE ON FINE.CourthouseID = COURTHOUSE.CourthouseID
-  LEFT JOIN SUBJECT ON FINE.SubjectID = SUBJECT.SubjectID
-  WHERE SUBJECT.SubjectID = ?;
+  LEFT JOIN COURTHOUSE ON FINE.CourthouseId = COURTHOUSE.CourthouseId
+  LEFT JOIN SUBJECT ON FINE.SubjectId = SUBJECT.SubjectId
+  WHERE SUBJECT.SubjectId = ?;
 `;
 
 const finesByCourthouseId = `
-  SELECT FINE.FineID, FINE.Amount, FINE.Date, FINE.CourtFile,
+  SELECT FINE.FineId, FINE.Amount, FINE.Date, FINE.CourtFile,
     COURTHOUSE.Name AS CourthouseName, COURTHOUSE.City, COURTHOUSE.Province,
-    SUBJECT.SubjectID, SUBJECT.Name AS SubjectName
+    SUBJECT.SubjectId, SUBJECT.Name AS SubjectName
   FROM FINE
-  LEFT JOIN COURTHOUSE ON FINE.CourthouseID = COURTHOUSE.CourthouseID
-  LEFT JOIN SUBJECT ON FINE.SubjectID = SUBJECT.SubjectID
-  WHERE COURTHOUSE.CourthouseID = ?;
+  LEFT JOIN COURTHOUSE ON FINE.CourthouseId = COURTHOUSE.CourthouseId
+  LEFT JOIN SUBJECT ON FINE.SubjectId = SUBJECT.SubjectId
+  WHERE COURTHOUSE.CourthouseId = ?;
 `;
 
 const finesOverdue = `
-  SELECT FINE.FineID, FINE.Amount, FINE.Date, FINE.CourtFile,
+  SELECT FINE.FineId, FINE.Amount, FINE.Date, FINE.CourtFile,
         COURTHOUSE.Name AS CourthouseName, COURTHOUSE.City, COURTHOUSE.Province,
         SUBJECT.Name AS SubjectName
   FROM FINE
-  LEFT JOIN COURTHOUSE ON FINE.CourthouseID = COURTHOUSE.CourthouseID
-  LEFT JOIN SUBJECT ON FINE.SubjectID = SUBJECT.SubjectID
+  LEFT JOIN COURTHOUSE ON FINE.CourthouseId = COURTHOUSE.CourthouseId
+  LEFT JOIN SUBJECT ON FINE.SubjectId = SUBJECT.SubjectId
   WHERE 
     FINE.Date <= NOW() - INTERVAL 1 YEAR
     AND FINE.DatePaid IS NULL;

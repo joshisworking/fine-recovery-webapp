@@ -73,7 +73,7 @@ const updateCourthouse = (courthouse, callback) => {
       Name = ?,
       City = ?,
       Province = ?
-    WHERE CourthouseID = ?;
+    WHERE CourthouseId = ?;
   `;
 
   db.query(

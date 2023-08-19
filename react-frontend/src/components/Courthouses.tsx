@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-type Courthouse = {
-  CourthouseID: number;
+export type Courthouse = {
+  CourthouseId: number;
   Name: string;
   City: string;
   Province: string;
@@ -36,8 +36,8 @@ const Courthouses: React.FC = () => {
         </thead>
         <tbody>
           {courthouses.map(court => (
-            <tr key={court.CourthouseID}>
-              <td>{court.CourthouseID}</td>
+            <tr key={court.CourthouseId}>
+              <td>{court.CourthouseId}</td>
               <td>{court.Name}</td>
               <td>{court.City}</td>
               <td>{court.Province}</td>
