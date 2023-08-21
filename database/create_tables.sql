@@ -20,13 +20,13 @@ USE `fines` ;
 DROP TABLE IF EXISTS `fines`.`USER` ;
 
 CREATE TABLE IF NOT EXISTS `fines`.`USER` (
-  `UserId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Username` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`UserId`),
-  UNIQUE INDEX `UserId_UNIQUE` (`UserId` ASC) VISIBLE,
-  UNIQUE INDEX `Username_UNIQUE` (`Username` ASC) VISIBLE,
-  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE)
+  `userId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`userId`),
+  UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) VISIBLE,
+  UNIQUE INDEX `userName_UNIQUE` (`userName` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -36,11 +36,11 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `fines`.`SUBJECT` ;
 
 CREATE TABLE IF NOT EXISTS `fines`.`SUBJECT` (
-  `SubjectId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(100) NOT NULL,
-  `DOB` CHAR(10) NOT NULL,
-  PRIMARY KEY (`SubjectId`),
-  UNIQUE INDEX `SubjectId_UNIQUE` (`SubjectId` ASC) VISIBLE)
+  `subjectId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `dob` CHAR(10) NOT NULL,
+  PRIMARY KEY (`subjectId`),
+  UNIQUE INDEX `subjectId_UNIQUE` (`subjectId` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -50,15 +50,15 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `fines`.`COURTHOUSE` ;
 
 CREATE TABLE IF NOT EXISTS `fines`.`COURTHOUSE` (
-  `CourthouseId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
-  `City` VARCHAR(100) NOT NULL,
-  `Province` VARCHAR(2) NOT NULL,
-  PRIMARY KEY (`CourthouseId`),
-  UNIQUE INDEX `CourthouseId_UNIQUE` (`CourthouseId` ASC) VISIBLE,
-  UNIQUE INDEX `Name_UNIQUE` (`Name` ASC) VISIBLE,
+  `courthouseId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `city` VARCHAR(100) NOT NULL,
+  `province` VARCHAR(2) NOT NULL,
+  PRIMARY KEY (`courthouseId`),
+  UNIQUE INDEX `courthouseId_UNIQUE` (`courthouseId` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
   CONSTRAINT `ck_PROVINCE`
-	CHECK (`Province` in ('AB', 'BC', 'MB', 'NB', 'Nl', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT' )))
+	CHECK (`province` in ('AB', 'BC', 'MB', 'NB', 'Nl', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT' )))
 ENGINE = InnoDB;
 
 
@@ -68,25 +68,25 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `fines`.`FINE` ;
 
 CREATE TABLE IF NOT EXISTS `fines`.`FINE` (
-  `FineId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Amount` DECIMAL(10,2) NOT NULL,
-  `Date` CHAR(10) NOT NULL,
-  `CourtFile` VARCHAR(20) NOT NULL,
-  `CourthouseId` INT UNSIGNED NOT NULL,
-  `SubjectId` INT UNSIGNED NOT NULL,
-  `DatePaid` CHAR(10) NULL,
-  PRIMARY KEY (`FineId`),
-  UNIQUE INDEX `FineId_UNIQUE` (`FineId` ASC) VISIBLE,
-  INDEX `fk_FINE_COURTHOUSE_idx` (`CourthouseId` ASC) VISIBLE,
-  INDEX `fk_FINE_SUBJECT1_idx` (`SubjectId` ASC) VISIBLE,
+  `fineId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `amount` DECIMAL(10,2) NOT NULL,
+  `date` CHAR(10) NOT NULL,
+  `courtFile` VARCHAR(20) NOT NULL,
+  `courthouseId` INT UNSIGNED NOT NULL,
+  `subjectId` INT UNSIGNED NOT NULL,
+  `datePaid` CHAR(10) NULL,
+  PRIMARY KEY (`fineId`),
+  UNIQUE INDEX `fineId_UNIQUE` (`fineId` ASC) VISIBLE,
+  INDEX `fk_FINE_COURTHOUSE_idx` (`courthouseId` ASC) VISIBLE,
+  INDEX `fk_FINE_SUBJECT1_idx` (`subjectId` ASC) VISIBLE,
   CONSTRAINT `fk_FINE_COURTHOUSE`
-    FOREIGN KEY (`CourthouseId`)
-    REFERENCES `fines`.`COURTHOUSE` (`CourthouseId`)
+    FOREIGN KEY (`courthouseId`)
+    REFERENCES `fines`.`COURTHOUSE` (`courthouseId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_FINE_SUBJECT1`
-    FOREIGN KEY (`SubjectId`)
-    REFERENCES `fines`.`SUBJECT` (`SubjectId`)
+    FOREIGN KEY (`subjectId`)
+    REFERENCES `fines`.`SUBJECT` (`subjectId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

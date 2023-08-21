@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 export type Courthouse = {
-  CourthouseId: number;
-  Name: string;
-  City: string;
-  Province: string;
+  courthouseId: number;
+  name: string;
+  city: string;
+  province: string;
 };
 
 const Courthouses: React.FC = () => {
@@ -36,11 +36,11 @@ const Courthouses: React.FC = () => {
         </thead>
         <tbody>
           {courthouses.map(court => (
-            <tr key={court.CourthouseId}>
-              <td>{court.CourthouseId}</td>
-              <td>{court.Name}</td>
-              <td>{court.City}</td>
-              <td>{court.Province}</td>
+            <tr key={court.courthouseId}>
+              <td>{court.courthouseId}</td>
+              <td>{court.name}</td>
+              <td>{court.city}</td>
+              <td>{court.province}</td>
             </tr>
           ))}
         </tbody>

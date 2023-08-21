@@ -1,95 +1,95 @@
 const fines = `
-  SELECT 
-    FINE.FineId,  
-    FINE.Amount,
-    FINE.Date,
-    FINE.CourtFile,
-    COURTHOUSE.CourthouseId,
-    COURTHOUSE.Name as CourthouseName,
-    SUBJECT.SubjectId,
-    SUBJECT.Name as SubjectName,
-    FINE.DatePaid
+  SELECT
+    FINE.fineId,  
+    FINE.amount,
+    FINE.date,
+    FINE.courtFile,
+    COURTHOUSE.courthouseId,
+    COURTHOUSE.name as courthouseName,
+    SUBJECT.subjectId,
+    SUBJECT.name as subjectName,
+    FINE.datePaid
   FROM FINE
   LEFT JOIN COURTHOUSE
-    ON Fine.CourthouseId = COURTHOUSE.CourthouseId
+    ON Fine.courthouseId = COURTHOUSE.courthouseId
   LEFT JOIN SUBJECT 
-    ON FINE.SubjectId = SUBJECT.SubjectId
+    ON FINE.subjectId = SUBJECT.subjectId
   ;`;
 
 const fineById = `
   SELECT
-    FINE.FineId,  
-    FINE.Amount,
-    FINE.Date,
-    FINE.CourtFile,
-    COURTHOUSE.CourthouseId,
-    COURTHOUSE.Name as CourthouseName,
-    SUBJECT.SubjectId,
-    SUBJECT.Name as SubjectName,
-    FINE.DatePaid 
+    FINE.fineId,  
+    FINE.amount,
+    FINE.date,
+    FINE.courtFile,
+    COURTHOUSE.courthouseId,
+    COURTHOUSE.name as courthouseName,
+    SUBJECT.subjectId,
+    SUBJECT.Name as subjectName,
+    FINE.datePaid 
   FROM FINE
   LEFT JOIN COURTHOUSE
-    ON Fine.CourthouseId = COURTHOUSE.CourthouseId
+    ON Fine.courthouseId = COURTHOUSE.courthouseId
   LEFT JOIN SUBJECT 
-    ON FINE.SubjectId = SUBJECT.SubjectId
-  WHERE FINE.FineId = ?;
+    ON FINE.subjectId = SUBJECT.subjectId
+  WHERE FINE.fineId = ?;
 `;
 
 const addFine = `
-  INSERT INTO FINE (Amount, Date, CourtFile, CourthouseId, SubjectId)
+  INSERT INTO FINE (amount, Date, courtFile, courthouseId, subjectId)
   VALUES (?, ?, ?, ?, ?);
 `;
 
 const updateFine = `
   UPDATE FINE SET 
-    Amount = ?,
-    Date = ?,
-    CourtFile = ?,
-    CourthouseId = ?,
-    SubjectId = ?,
+    amount = ?,
+    date = ?,
+    courtFile = ?,
+    courthouseId = ?,
+    subjectId = ?,
     DatePaid = ?
-  WHERE FineId = ?;
+  WHERE fineId = ?;
 `;
 
-const deleteFine = 'DELETE FROM FINE WHERE FineId = ?;';
+const deleteFine = 'DELETE FROM FINE WHERE fineId = ?;';
 
-const finesBySubjectId = `
-  SELECT FINE.FineId, FINE.Amount, FINE.Date, FINE.CourtFile,
-    COURTHOUSE.CourthouseId, COURTHOUSE.City,
-    SUBJECT.Name AS SubjectName
+const finesBysubjectId = `
+  SELECT FINE.fineId, FINE.amount, FINE.date, FINE.courtFile,
+    COURTHOUSE.courthouseId, COURTHOUSE.City,
+    SUBJECT.Name AS subjectName
   FROM FINE
-  LEFT JOIN COURTHOUSE ON FINE.CourthouseId = COURTHOUSE.CourthouseId
-  LEFT JOIN SUBJECT ON FINE.SubjectId = SUBJECT.SubjectId
-  WHERE SUBJECT.SubjectId = ?;
+  LEFT JOIN COURTHOUSE ON FINE.courthouseId = COURTHOUSE.courthouseId
+  LEFT JOIN SUBJECT ON FINE.subjectId = SUBJECT.subjectId
+  WHERE SUBJECT.subjectId = ?;
 `;
 
-const finesByCourthouseId = `
-  SELECT FINE.FineId, FINE.Amount, FINE.Date, FINE.CourtFile,
-    COURTHOUSE.Name AS CourthouseName, COURTHOUSE.City, COURTHOUSE.Province,
-    SUBJECT.SubjectId, SUBJECT.Name AS SubjectName
+const finesBycourthouseId = `
+  SELECT FINE.fineId, FINE.amount, FINE.date, FINE.courtFile,
+    COURTHOUSE.name AS courthouseName, COURTHOUSE.City, COURTHOUSE.Province,
+    SUBJECT.subjectId, SUBJECT.Name AS subjectName
   FROM FINE
-  LEFT JOIN COURTHOUSE ON FINE.CourthouseId = COURTHOUSE.CourthouseId
-  LEFT JOIN SUBJECT ON FINE.SubjectId = SUBJECT.SubjectId
-  WHERE COURTHOUSE.CourthouseId = ?;
+  LEFT JOIN COURTHOUSE ON FINE.courthouseId = COURTHOUSE.courthouseId
+  LEFT JOIN SUBJECT ON FINE.subjectId = SUBJECT.subjectId
+  WHERE COURTHOUSE.courthouseId = ?;
 `;
 
 const finesOverdue = `
-  SELECT FINE.FineId, FINE.Amount, FINE.Date, FINE.CourtFile,
-        COURTHOUSE.Name AS CourthouseName, COURTHOUSE.City, COURTHOUSE.Province,
-        SUBJECT.Name AS SubjectName
+  SELECT FINE.fineId, FINE.amount, FINE.date, FINE.courtFile,
+        COURTHOUSE.name AS courthouseName, COURTHOUSE.city, COURTHOUSE.province,
+        SUBJECT.Name AS subjectName
   FROM FINE
-  LEFT JOIN COURTHOUSE ON FINE.CourthouseId = COURTHOUSE.CourthouseId
-  LEFT JOIN SUBJECT ON FINE.SubjectId = SUBJECT.SubjectId
+  LEFT JOIN COURTHOUSE ON FINE.courthouseId = COURTHOUSE.courthouseId
+  LEFT JOIN SUBJECT ON FINE.subjectId = SUBJECT.subjectId
   WHERE 
-    FINE.Date <= NOW() - INTERVAL 1 YEAR
-    AND FINE.DatePaid IS NULL;
+    FINE.date <= NOW() - INTERVAL 1 YEAR
+    AND FINE.datePaid IS NULL;
 `;
 
 module.exports = {
   fines,
   fineById,
-  finesByCourthouseId,
-  finesBySubjectId,
+  finesBycourthouseId,
+  finesBysubjectId,
   finesOverdue,
   updateFine,
   deleteFine,

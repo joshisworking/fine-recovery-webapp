@@ -13,7 +13,7 @@ const getSubjects = callback => {
 };
 
 const getSubject = (id, callback) => {
-  const sql = 'SELECT * FROM Subject WHERE SubjectId = ?';
+  const sql = 'SELECT * FROM Subject WHERE subjectId = ?';
   db.query(sql, id, (err, results) => {
     if (err) {
       console.error('Error executing the query:', err.message);
@@ -29,7 +29,7 @@ const getSubject = (id, callback) => {
 };
 
 const addSubject = (subject, callback) => {
-  const sql = 'INSERT INTO Subject (Name, DOB) VALUES (?,?);';
+  const sql = 'INSERT INTO Subject (name, dob) VALUES (?,?);';
   db.query(sql, [subject.name, subject.dob], (err, results) => {
     if (err) {
       console.error('Error executing the query:', err.message);
@@ -42,7 +42,7 @@ const addSubject = (subject, callback) => {
 };
 
 const deleteSubject = (id, callback) => {
-  const sql = 'DELETE FROM Subject WHERE SubjectId = ?';
+  const sql = 'DELETE FROM Subject WHERE subjectId = ?';
   db.query(sql, id, (err, result) => {
     if (err) {
       console.error('Error executing deletion:', err.message);

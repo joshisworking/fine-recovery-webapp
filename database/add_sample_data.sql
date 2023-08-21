@@ -1,5 +1,5 @@
 -- User data
-INSERT INTO `USER` (`Username`, `Email`)
+INSERT INTO `USER` (`username`, `email`)
 VALUES
   ('JohnDoe', 'john.doe@example.com'),
   ('JaneSmith', 'jane.smith@example.com'),
@@ -7,7 +7,7 @@ VALUES
 
 
 -- Courthouse data
-INSERT INTO `COURTHOUSE` (`Name`, `City`, `Province`)
+INSERT INTO `COURTHOUSE` (`name`, `city`, `province`)
 VALUES
   ('Justice Central Courthouse', 'Metropolis', 'ON'),
   ('Liberty District Courthouse', 'Freedomville', 'BC'),
@@ -17,7 +17,7 @@ VALUES
 
 
 -- Subject data
-INSERT INTO `SUBJECT` (`Name`, `DOB`)
+INSERT INTO `SUBJECT` (`name`, `dob`)
 VALUES
   ('Michael Johnson', '1990-05-15'),
   ('Emily Williams', '1988-12-10'),
@@ -37,7 +37,7 @@ VALUES
 
     
 -- 15 fines less than 1 year ago
-INSERT INTO `FINE` (`Amount`, `Date`, `CourtFile`, `CourthouseId`, `SubjectId`)
+INSERT INTO `FINE` (`amount`, `date`, `courtFile`, `courthouseId`, `subjectId`)
 VALUES
   (100.00, DATE_FORMAT(NOW() - INTERVAL 1 DAY, '%Y-%m-%d'), 'CF001', 1, 1),
   (200.00, DATE_FORMAT(NOW() - INTERVAL 3 DAY, '%Y-%m-%d'), 'CF002', 2, 2),
@@ -56,7 +56,7 @@ VALUES
   (55.00, DATE_FORMAT(NOW() - INTERVAL 11 MONTH, '%Y-%m-%d'), 'CF015', 5, 15);
 
 -- 15 fines more than 1 year ago
-INSERT INTO `FINE` (`Amount`, `Date`, `CourtFile`, `CourthouseId`, `SubjectId`)
+INSERT INTO `FINE` (`amount`, `date`, `courtFile`, `courthouseId`, `subjectId`)
 VALUES
   (210.00, DATE_FORMAT(NOW() - INTERVAL 1 YEAR - INTERVAL 1 DAY, '%Y-%m-%d'), 'CF016', 1, 1),
   (240.00, DATE_FORMAT(NOW() - INTERVAL 1 YEAR - INTERVAL 3 DAY, '%Y-%m-%d'), 'CF017', 2, 2),

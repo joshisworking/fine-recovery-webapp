@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
 
 export type Fine = {
-  FineId: number;
-  Amount: number;
-  Date: string;
-  CourtFile: string;
-  CourthouseId: number;
-  CourthouseName: string;
-  SubjectId: number;
-  SubjectName: string;
-  DatePaid: string | null;
+  fineId: number;
+  amount: number;
+  date: string;
+  courtFile: string;
+  courthouseId: number;
+  courthouseName: string;
+  subjectId: number;
+  subjectName: string;
+  datePaid: string | null;
 };
 
 const Fines: React.FC = () => {
@@ -34,7 +34,7 @@ const Fines: React.FC = () => {
         <thead>
           <tr>
             <th>Fine ID</th>
-            <th>Amount</th>
+            <th>amount</th>
             <th>Date</th>
             <th>Court File</th>
             <th>Courthouse</th>
@@ -44,21 +44,21 @@ const Fines: React.FC = () => {
         </thead>
         <tbody>
           {fines.map(fine => (
-            <tr key={fine.FineId}>
+            <tr key={fine.fineId}>
               <td>
                 <Link
                   className="table-edit-link"
-                  to={'/fine/' + fine.FineId}>
+                  to={'/fine/' + fine.fineId}>
                   Edit
                 </Link>
-                {fine.FineId}
+                {fine.fineId}
               </td>
-              <td>${fine.Amount}</td>
-              <td>{fine.Date}</td>
-              <td>{fine.CourtFile}</td>
-              <td>{fine.CourthouseName}</td>
-              <td>{fine.SubjectName}</td>
-              <td>{fine.DatePaid || '-'}</td>
+              <td>${fine.amount}</td>
+              <td>{fine.date}</td>
+              <td>{fine.courtFile}</td>
+              <td>{fine.courthouseName}</td>
+              <td>{fine.subjectName}</td>
+              <td>{fine.datePaid || '-'}</td>
             </tr>
           ))}
         </tbody>

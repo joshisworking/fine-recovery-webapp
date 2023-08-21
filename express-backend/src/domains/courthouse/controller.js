@@ -13,7 +13,7 @@ const getCourthouses = callback => {
 };
 
 const getCourthouse = (id, callback) => {
-  const sql = 'SELECT * FROM COURTHOUSE WHERE CourthouseId = ?';
+  const sql = 'SELECT * FROM COURTHOUSE WHERE courthouseId = ?';
   db.query(sql, id, (err, results) => {
     if (err) {
       console.log('Error executing the query: ', err);
@@ -30,7 +30,7 @@ const getCourthouse = (id, callback) => {
 
 const addCourthouse = (courthouse, callback) => {
   const sql = `
-    INSERT INTO COURTHOUSE (Name, City, Province)
+    INSERT INTO COURTHOUSE (name, city, province)
     VALUES (?, ?, ?);
   `;
 
@@ -50,7 +50,7 @@ const addCourthouse = (courthouse, callback) => {
 };
 
 const deleteCourthouse = (id, callback) => {
-  const sql = 'DELETE FROM COURTHOUSE WHERE CourthouseId = ?';
+  const sql = 'DELETE FROM COURTHOUSE WHERE courthouseId = ?';
 
   db.query(sql, id, (err, result) => {
     if (err) {
@@ -70,10 +70,10 @@ const updateCourthouse = (courthouse, callback) => {
   const sql = `
     UPDATE COURTHOUSE
     SET 
-      Name = ?,
-      City = ?,
-      Province = ?
-    WHERE CourthouseId = ?;
+      name = ?,
+      city = ?,
+      province = ?
+    WHERE courthouseId = ?;
   `;
 
   db.query(

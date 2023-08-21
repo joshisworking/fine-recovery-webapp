@@ -93,7 +93,7 @@ router.delete('/fine/:id', (req, res) => {
   });
 });
 
-router.put('/fine/:id', (req, res) => {
+router.put('/fine', (req, res) => {
   const fine = req.body;
   controller.updateFine(fine, err => {
     if (err) {

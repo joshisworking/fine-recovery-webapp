@@ -10,13 +10,14 @@ const FineDetails: React.FC = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [fine, setFine] = useState<Fine | null>(null);
   const [courthouses, setCourthouses] = useState<Courthouse[] | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [message, setMessage] = useState('');
 
   const toggleModal = () => {
     setShowModal(!showModal);
-    console.log('toggled: ' + showModal);
   };
 
   const navigateBack = () => {
@@ -69,10 +70,27 @@ const FineDetails: React.FC = () => {
 
       return {
         ...prevFine,
-        CourthouseId: selectedId,
-        CourthouseName: selectedName,
+        courthouseId: selectedId,
+        courthouseName: selectedName,
       };
     });
+  };
+
+  const submitUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
+    event.preventDefault();
+    setMessage('');
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fine),
+    };
+
+    fetch('http://localhost:5000/fine', requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setMessage(data.message);
+      });
   };
 
   if (fine === null) {
@@ -84,74 +102,74 @@ const FineDetails: React.FC = () => {
       <>
         <div>
           <h1>Fine Details</h1>
-          <form
-            action="PLACE"
-            method="put">
+          <form>
             <div className="input-wrapper">
-              <label htmlFor="FineId">Fine ID</label>
+              <label htmlFor="fineId">Fine ID</label>
               <input
                 type="number"
-                id="FineId"
-                name="FineId"
-                value={fine.FineId}
+                id="fineId"
+                name="fineId"
+                value={fine.fineId}
                 readOnly
               />
             </div>
             <div className="input-wrapper">
-              <label htmlFor="Amount">Amount</label>
+              <label htmlFor="amount">Amount</label>
               <input
                 type="number"
-                id="Amount"
-                name="Amount"
-                value={fine.Amount}
+                id="amount"
+                name="amount"
+                value={fine.amount}
                 onChange={handleInputChange}
               />
             </div>
             <div className="input-wrapper">
-              <label htmlFor="Date">Date</label>
+              <label htmlFor="date">Date</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={fine.date}
+                onChange={handleInputChange}
+                pattern="\d{4}-\d{2}-\d{2}"
+                placeholder="YYYY-MM-DD"
+              />
+            </div>
+            <div className="input-wrapper">
+              <label htmlFor="courtFile">Court File</label>
               <input
                 type="text"
-                id="Date"
-                name="Date"
-                value={fine.Date}
+                id="courtFile"
+                name="courtFile"
+                value={fine.courtFile}
                 onChange={handleInputChange}
               />
             </div>
             <div className="input-wrapper">
-              <label htmlFor="CourtFile">Court File</label>
-              <input
-                type="text"
-                id="CourtFile"
-                name="CourtFile"
-                value={fine.CourtFile}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="input-wrapper">
-              <label htmlFor="CourthouseId">Courthouse Name</label>
+              <label htmlFor="courthouseId">Courthouse Name</label>
               {courthouses != null ? (
                 <select
-                  id="CourthouseId"
-                  name="CourthouseId"
+                  id="courthouseId"
+                  name="courthouseId"
                   value={
                     courthouses.find(
                       courthouse =>
-                        courthouse.CourthouseId === fine.CourthouseId
-                    )?.Name
+                        courthouse.courthouseId === fine.courthouseId
+                    )?.name
                   }
                   onChange={e => {
                     const selectedName = e.target.value; // Selected Courthouse Name
                     const selectedId =
                       courthouses.find(
-                        courthouse => courthouse.Name === selectedName
-                      )?.CourthouseId || 0; // Default to 0 if CourthouseId is not found
+                        courthouse => courthouse.name === selectedName
+                      )?.courthouseId || 0; // Default to 0 if courthouseId is not found
                     handleCourthouseChange(selectedName, selectedId);
                   }}>
                   {courthouses.map(court => (
                     <option
-                      key={court.CourthouseId}
-                      value={court.Name}>
-                      {court.Name}
+                      key={court.courthouseId}
+                      value={court.name}>
+                      {court.name}
                     </option>
                   ))}
                 </select>
@@ -160,12 +178,12 @@ const FineDetails: React.FC = () => {
               )}
             </div>
             <div className="input-wrapper">
-              <label htmlFor="SubjectName">Subject Name</label>
+              <label htmlFor="subjectName">Subject Name</label>
               <input
                 type="text"
-                id="SubjectName"
-                name="SubjectName"
-                value={fine.SubjectName}
+                id="subjectName"
+                name="subjectName"
+                value={fine.subjectName}
                 readOnly
               />
               <button
@@ -179,28 +197,32 @@ const FineDetails: React.FC = () => {
               </button>
             </div>
             <div className="input-wrapper">
-              <label htmlFor="DatePaid">Date Paid</label>
+              <label htmlFor="datePaid">Date Paid</label>
               <input
-                type="text"
-                id="DatePaid"
-                name="DatePaid"
-                value={fine.DatePaid === null ? '' : fine.DatePaid}
+                type="date"
+                id="datePaid"
+                name="datePaid"
+                value={fine.datePaid === null ? '' : fine.datePaid}
                 onChange={handleInputChange}
+                pattern="\d{4}-\d{2}-\d{2}"
+                placeholder="YYYY-MM-DD"
               />
             </div>
             <button
               className="submit"
-              type="button">
-              Submit (NOT CONFIGURED)
+              id="submit"
+              onClick={submitUpdate}>
+              Submit
             </button>
             <button
               type="button"
               className="cancel"
               onClick={navigateBack}>
-              Cancel
+              Exit
             </button>
           </form>
         </div>
+        <div className="message">{message}</div>
         <ChangeSubjectModal
           handleClose={toggleModal}
           show={showModal}

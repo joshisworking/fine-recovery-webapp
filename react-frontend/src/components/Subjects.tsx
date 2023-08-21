@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 type Subject = {
-  SubjectId: number;
-  Name: string;
-  DOB: string;
+  subjectId: number;
+  name: string;
+  dob: string;
 };
 
 const Subjects: React.FC = () => {
@@ -34,10 +34,10 @@ const Subjects: React.FC = () => {
         </thead>
         <tbody>
           {subjects.map(subject => (
-            <tr key={subject.SubjectId}>
-              <td>{subject.SubjectId}</td>
-              <td>{subject.Name}</td>
-              <td>{subject.DOB}</td>
+            <tr key={subject.subjectId}>
+              <td>{subject.subjectId}</td>
+              <td>{subject.name}</td>
+              <td>{subject.dob}</td>
             </tr>
           ))}
         </tbody>
