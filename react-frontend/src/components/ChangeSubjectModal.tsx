@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import iModal from '../interfaces/iModal';
+import { useEffect } from 'react';
 
 const ChangeSubjectModal: React.FC<iModal> = ({
   show,
@@ -8,6 +9,10 @@ const ChangeSubjectModal: React.FC<iModal> = ({
   function onSaveHandler() {
     console.log('Save clicked');
   }
+
+  useEffect(() => {
+    fetch;
+  });
 
   return createPortal(
     <>
@@ -22,7 +27,24 @@ const ChangeSubjectModal: React.FC<iModal> = ({
             e.stopPropagation();
           }}>
           <header className="modal-header">Change Subject</header>
-          <main className="modal-body">TODO: Change subject here.</main>
+          <main className="modal-body">
+            <form action="">
+              <div className="input-wrapper">
+                <label htmlFor=""></label>
+                <input
+                  type="text"
+                  className="firstName"
+                />
+              </div>
+              <div className="input-wrapper">
+                <label htmlFor=""></label>
+                <input
+                  type="text"
+                  className="lastName"
+                />
+              </div>
+            </form>
+          </main>
           <footer className="modal-footer">
             <button
               className="save"

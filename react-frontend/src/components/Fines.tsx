@@ -16,54 +16,110 @@ export type Fine = {
 
 const Fines: React.FC = () => {
   setTitle('Fines');
-  const [fines, setFines] = useState<Fine[]>([]);
+  const [allFines, setAllFines] = useState<Fine[]>([]);
+  const [filterText, setFilterText] = useState('');
+  const [unpaidOnly, setUnpaidOnly] = useState(false);
 
   // Obtain fine data
   useEffect(() => {
     fetch('http://localhost:5000/fine')
       .then(response => response.json())
       .then((data: { results: Fine[] }) => {
-        setFines(data.results);
+        setAllFines(data.results);
+        setFilteredFines(data.results);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
+  const [filteredFines, setFilteredFines] = useState<Fine[]>([]);
+
+  useEffect(() => {
+    if (filterText.trim() === '') {
+      // When the search text is empty, restore filteredFines to match allFines
+      setFilteredFines(
+        allFines.filter(fine =>
+          unpaidOnly ? fine.datePaid === null : fine.fineId
+        )
+      );
+    } else {
+      // Otherwise, filter based on the search text and update filteredFines
+      setFilteredFines(
+        allFines.filter(
+          fine =>
+            (fine.courthouseName
+              .toLowerCase()
+              .includes(filterText.toLowerCase()) ||
+              fine.subjectName
+                .toLowerCase()
+                .includes(filterText.toLowerCase()) ||
+              fine.courtFile
+                .toLowerCase()
+                .includes(filterText.toLowerCase())) &&
+            (unpaidOnly ? fine.datePaid === null : fine.fineId)
+        )
+      );
+    }
+  }, [filterText, allFines, unpaidOnly]);
+
   return (
-    <div className="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Fine ID</th>
-            <th>amount</th>
-            <th>Date</th>
-            <th>Court File</th>
-            <th>Courthouse</th>
-            <th>Subject</th>
-            <th>Date Paid</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fines.map(fine => (
-            <tr key={fine.fineId}>
-              <td>
-                <Link
-                  className="table-edit-link"
-                  to={'/fine/' + fine.fineId}>
-                  Edit
-                </Link>
-                {fine.fineId}
-              </td>
-              <td>${fine.amount}</td>
-              <td>{fine.date}</td>
-              <td>{fine.courtFile}</td>
-              <td>{fine.courthouseName}</td>
-              <td>{fine.subjectName}</td>
-              <td>{fine.datePaid || '-'}</td>
+    <>
+      <div className="heading-container">
+        <h1 className="list-header">Fines</h1>
+        <form
+          className="filter-form"
+          onSubmit={e => e.preventDefault()}>
+          <input
+            type="text"
+            name="search"
+            id="search"
+            onChange={e => setFilterText(e.target.value)}
+            placeholder="Search fines"
+          />
+          <input
+            type="checkbox"
+            name="unpaid"
+            id="unpaid"
+            onChange={e => setUnpaidOnly(e.target.checked)}
+          />
+          <label htmlFor="unpaid">Unpaid</label>
+        </form>
+      </div>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Fine ID</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Court File</th>
+              <th>Courthouse</th>
+              <th>Subject</th>
+              <th>Date Paid</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {filteredFines.map(fine => (
+              <tr key={fine.fineId}>
+                <td>
+                  <Link
+                    className="table-edit-link"
+                    to={'/fine/' + fine.fineId}>
+                    Edit
+                  </Link>
+                  {fine.fineId}
+                </td>
+                <td>${fine.amount}</td>
+                <td>{fine.date}</td>
+                <td>{fine.courtFile}</td>
+                <td>{fine.courthouseName}</td>
+                <td>{fine.subjectName}</td>
+                <td>{fine.datePaid || '-'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import { Fine } from './Fines';
 import { Courthouse } from './Courthouses';
 import { useParams, useNavigate } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
-import ChangeSubjectModal from './ChangeSubjectModal';
+import ConfirmationModal from './ConfirmationModal';
 
 const FineDetails: React.FC = () => {
   setTitle('Fine details');
@@ -13,14 +13,15 @@ const FineDetails: React.FC = () => {
 
   const [fine, setFine] = useState<Fine | null>(null);
   const [courthouses, setCourthouses] = useState<Courthouse[] | null>(null);
-  const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const messageDiv = document.getElementById('message')!;
+  const [fineDeleted, setFineDeleted] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState(
+    'Are you sure you would like to delete this fine?'
+  );
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const navigateBack = () => {
+  const navigateBackToFines = () => {
     navigate('/fine');
   };
 
@@ -79,6 +80,7 @@ const FineDetails: React.FC = () => {
   const submitUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
     event.preventDefault();
     setMessage('');
+
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -86,11 +88,53 @@ const FineDetails: React.FC = () => {
     };
 
     fetch('http://localhost:5000/fine', requestOptions)
-      .then(response => response.json())
+      .then(response => {
+        if (response.ok) {
+          messageDiv.className = 'message success';
+        } else {
+          messageDiv.className = 'message fail';
+        }
+        return response.json();
+      })
       .then(data => {
         console.log(data);
+        console.log();
         setMessage(data.message);
       });
+  };
+
+  const deleteFine = () => {
+    setMessage('');
+    let message = '';
+    const url = 'http://localhost:5000/fine/' + fine?.fineId;
+    const requestOptions = {
+      method: 'DELETE',
+    };
+
+    fetch(url, requestOptions)
+      .then(response => {
+        if (response.ok) {
+          setFineDeleted(true);
+          message =
+            'Fine successfully deleted. Close this box to return to fines.';
+          messageDiv.className = 'message success';
+        } else {
+          message = 'Fine could not be deleted';
+          messageDiv.className = 'message fail';
+        }
+        setConfirmationMessage(message);
+        setMessage(message);
+        return response.json();
+      })
+      .then(data => console.log(data));
+  };
+
+  const closeModal = () => {
+    if (fineDeleted) {
+      navigateBackToFines();
+    } else {
+      setShowModal(!showModal);
+    }
   };
 
   if (fine === null) {
@@ -100,7 +144,7 @@ const FineDetails: React.FC = () => {
   } else {
     return (
       <>
-        <div>
+        <div className="form-container">
           <h1>Fine Details</h1>
           <form>
             <div className="input-wrapper">
@@ -185,16 +229,9 @@ const FineDetails: React.FC = () => {
                 name="subjectName"
                 value={fine.subjectName}
                 readOnly
+                hidden
               />
-              <button
-                className="btn-edit-subject"
-                onClick={toggleModal}
-                type="button">
-                <img
-                  src="/editing.png"
-                  alt="Edit subject"
-                />
-              </button>
+              <p>{fine.subjectName}</p>
             </div>
             <div className="input-wrapper">
               <label htmlFor="datePaid">Date Paid</label>
@@ -217,15 +254,29 @@ const FineDetails: React.FC = () => {
             <button
               type="button"
               className="cancel"
-              onClick={navigateBack}>
+              onClick={navigateBackToFines}>
               Exit
+            </button>
+            <button
+              className="delete"
+              onClick={e => {
+                e.preventDefault();
+                setShowModal(!showModal);
+              }}>
+              Delete
             </button>
           </form>
         </div>
-        <div className="message">{message}</div>
-        <ChangeSubjectModal
-          handleClose={toggleModal}
+        <div
+          className="message"
+          id="message">
+          {message}
+        </div>
+        <ConfirmationModal
           show={showModal}
+          message={confirmationMessage}
+          handleConfirm={deleteFine}
+          handleClose={closeModal}
         />
       </>
     );
