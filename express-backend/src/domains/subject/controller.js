@@ -1,3 +1,4 @@
+const { query } = require('express');
 const db = require('../../config/db');
 
 const getSubjects = callback => {
@@ -15,6 +16,23 @@ const getSubjects = callback => {
 const getSubject = (id, callback) => {
   const sql = 'SELECT * FROM Subject WHERE subjectId = ?';
   db.query(sql, id, (err, results) => {
+    if (err) {
+      console.error('Error executing the query:', err.message);
+      callback(err, null);
+    } else {
+      if (results.length === 0) {
+        callback(new Error('Subject not found'), null);
+      } else {
+        callback(null, results);
+      }
+    }
+  });
+};
+
+const getSubjectByName = (searchString, callback) => {
+  const sql = 'SELECT SubjectId, Name FROM SUBJECT WHERE NAME LIKE ?';
+  db.query(sql, searchString, (err, results) => {
+    console.log(query);
     if (err) {
       console.error('Error executing the query:', err.message);
       callback(err, null);
@@ -62,4 +80,5 @@ module.exports = {
   getSubject,
   addSubject,
   deleteSubject,
+  getSubjectByName,
 };

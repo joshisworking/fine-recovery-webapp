@@ -11,27 +11,57 @@ const FineDetails: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [fine, setFine] = useState<Fine | null>(null);
   const [courthouses, setCourthouses] = useState<Courthouse[] | null>(null);
+  const [fine, setFine] = useState<Fine | null>(null);
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const messageDiv = document.getElementById('message')!;
+  const [messageClassName, setMessageClassName] = useState('message');
+  // const messageDiv = document.getElementById('message')!;
   const [fineDeleted, setFineDeleted] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState(
     'Are you sure you would like to delete this fine?'
   );
+  const [existingFine, setExistingFine] = useState(false);
+  const fineUrl = 'http://localhost:5000/fine';
 
   const navigateBackToFines = () => {
     navigate('/fine');
   };
 
-  useEffect(() => {
-    fetch('http://localhost:5000/fine/' + id)
-      .then(response => response.json())
-      .then(data => {
-        setFine(data);
-      });
-  }, [id]);
+  const setBlankFine = () => {
+    setFine({
+      amount: 0,
+      date: new Date().toISOString().substring(0, 10),
+      courthouseId: -1,
+      courthouseName: '',
+      courtFile: '',
+      subjectName: '',
+      datePaid: null,
+    });
+  };
+
+  const fetchFine = () => {
+    if (id != 'add') {
+      setExistingFine(true);
+      fetch('http://localhost:5000/fine/' + id)
+        .then(response => {
+          if (!response.ok) {
+            setMessage('Error: Fine with Id: ' + id + ' not found.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.message !== 'Fine not found') {
+            setFine(data);
+          }
+        });
+    } else {
+      setBlankFine();
+    }
+  };
+
+  // If page not loaded from add fine url, fetch fine
+  useEffect(fetchFine, [id]);
 
   useEffect(() => {
     const testStorage = sessionStorage.getItem('courthouses');
@@ -52,10 +82,6 @@ const FineDetails: React.FC = () => {
     const { name, value } = event.target;
 
     setFine(prevFine => {
-      if (!prevFine) {
-        return null;
-      }
-
       return {
         ...prevFine,
         [name]: value,
@@ -65,10 +91,6 @@ const FineDetails: React.FC = () => {
 
   const handleCourthouseChange = (selectedName: string, selectedId: number) => {
     setFine(prevFine => {
-      if (!prevFine) {
-        return null;
-      }
-
       return {
         ...prevFine,
         courthouseId: selectedId,
@@ -77,28 +99,68 @@ const FineDetails: React.FC = () => {
     });
   };
 
+  const setMessageFail = () => {
+    setMessageClassName('message fail');
+  };
+
+  const setMessageSuccess = () => {
+    setMessageClassName('message success');
+  };
+
   const submitUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
     event.preventDefault();
     setMessage('');
 
+    if (fine === null) {
+      setMessage('Error: Fine cannot be saved. Please try again later.');
+      setMessageFail();
+      return;
+    } else if (fine.amount == null || fine.amount <= 0) {
+      setMessage('Error: Fine amount must be greater than 0');
+      setMessageFail();
+      return;
+    } else if (fine.date == null || fine.date.trim() === '') {
+      setMessage('Error: Fine date must be added');
+      setMessageFail();
+      return;
+    } else if (Date.parse(fine.date) > Date.now()) {
+      setMessage('Error: Fine date must be in the past');
+      setMessageFail();
+      return;
+    } else if (fine.courtFile.trim() === '' || fine.courtFile == null) {
+      setMessage('Error: Court file number must be entered');
+      setMessageFail();
+      return;
+    } else if (fine.courthouseName == null) {
+      setMessage('Error: Courthouse must be selected');
+      setMessageFail();
+      return;
+    } else if (
+      fine.subjectId == null ||
+      fine.subjectName == null ||
+      fine.subjectId <= 0
+    ) {
+      setMessage('Error: Fine subject must be selected');
+      setMessageFail();
+      return;
+    }
+
     const requestOptions = {
-      method: 'PUT',
+      method: existingFine ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fine),
     };
 
-    fetch('http://localhost:5000/fine', requestOptions)
+    fetch(fineUrl, requestOptions)
       .then(response => {
         if (response.ok) {
-          messageDiv.className = 'message success';
+          setMessageClassName('message success');
         } else {
-          messageDiv.className = 'message fail';
+          setMessageClassName('message fail');
         }
         return response.json();
       })
       .then(data => {
-        console.log(data);
-        console.log();
         setMessage(data.message);
       });
   };
@@ -117,10 +179,10 @@ const FineDetails: React.FC = () => {
           setFineDeleted(true);
           message =
             'Fine successfully deleted. Close this box to return to fines.';
-          messageDiv.className = 'message success';
+          setMessageClassName('message success');
         } else {
           message = 'Fine could not be deleted';
-          messageDiv.className = 'message fail';
+          setMessageClassName('message fail');
         }
         setConfirmationMessage(message);
         setMessage(message);
@@ -138,7 +200,13 @@ const FineDetails: React.FC = () => {
   };
 
   if (fine === null) {
-    return <div>Error: Fine with id {id} not found</div>;
+    return (
+      <div
+        className="message fail"
+        id="message">
+        {message}
+      </div>
+    );
   } else if (courthouses === null) {
     return <div>Error: Courthouses could not be fetched</div>;
   } else {
@@ -149,13 +217,7 @@ const FineDetails: React.FC = () => {
           <form>
             <div className="input-wrapper">
               <label htmlFor="fineId">Fine ID</label>
-              <input
-                type="number"
-                id="fineId"
-                name="fineId"
-                value={fine.fineId}
-                readOnly
-              />
+              <p>{fine.fineId}</p>
             </div>
             <div className="input-wrapper">
               <label htmlFor="amount">Amount</label>
@@ -229,9 +291,7 @@ const FineDetails: React.FC = () => {
                 name="subjectName"
                 value={fine.subjectName}
                 readOnly
-                hidden
               />
-              <p>{fine.subjectName}</p>
             </div>
             <div className="input-wrapper">
               <label htmlFor="datePaid">Date Paid</label>
@@ -251,29 +311,34 @@ const FineDetails: React.FC = () => {
               onClick={submitUpdate}>
               Submit
             </button>
+            {existingFine ? (
+              <button
+                className="delete"
+                onClick={e => {
+                  e.preventDefault();
+                  setShowModal(!showModal);
+                }}>
+                Delete
+              </button>
+            ) : (
+              <></>
+            )}
             <button
               type="button"
               className="cancel"
               onClick={navigateBackToFines}>
               Exit
             </button>
-            <button
-              className="delete"
-              onClick={e => {
-                e.preventDefault();
-                setShowModal(!showModal);
-              }}>
-              Delete
-            </button>
           </form>
         </div>
         <div
-          className="message"
+          className={messageClassName}
           id="message">
           {message}
         </div>
         <ConfirmationModal
           show={showModal}
+          title="Confirm delete fine"
           message={confirmationMessage}
           handleConfirm={deleteFine}
           handleClose={closeModal}

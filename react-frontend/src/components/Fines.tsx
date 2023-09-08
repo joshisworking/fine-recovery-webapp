@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
 
 export type Fine = {
-  fineId: number;
+  fineId?: number;
   amount: number;
   date: string;
   courtFile: string;
   courthouseId: number;
   courthouseName: string;
-  subjectId: number;
-  subjectName: string;
+  subjectId?: number;
+  subjectName?: string;
   datePaid: string | null;
 };
 
@@ -49,8 +49,8 @@ const Fines: React.FC = () => {
             (fine.courthouseName
               .toLowerCase()
               .includes(filterText.toLowerCase()) ||
-              fine.subjectName
-                .toLowerCase()
+              fine
+                .subjectName!.toLowerCase()
                 .includes(filterText.toLowerCase()) ||
               fine.courtFile
                 .toLowerCase()
@@ -83,6 +83,7 @@ const Fines: React.FC = () => {
           />
           <label htmlFor="unpaid">Unpaid</label>
         </form>
+        <Link to="/fine/add">Add fine</Link>
       </div>
       <div className="table-container">
         <table>

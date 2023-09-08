@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 type ConfirmationModalProps = {
   show: boolean;
   message?: string;
+  title: string;
   handleClose: () => void;
   handleConfirm: () => void;
 };
@@ -10,6 +11,7 @@ type ConfirmationModalProps = {
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   show,
   message,
+  title,
   handleClose: onCloseHandler,
   handleConfirm,
 }) => {
@@ -27,7 +29,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           onClick={e => {
             e.stopPropagation();
           }}>
-          <header className="modal-header">Confrim delete fine</header>
+          <header className="modal-header">{title}</header>
           <main className="modal-body">{message}</main>
           <footer className="modal-footer">
             <button
