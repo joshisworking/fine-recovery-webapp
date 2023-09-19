@@ -100,7 +100,7 @@ router.put('/fine', (req, res) => {
       if (err.message === 'Fine not found') {
         res.status(404).json({ message: 'Fine not found' });
       } else {
-        res.status(500).json({ messsage: 'Error: Failed to update fine' });
+        res.status(400).json({ messsage: 'Error: Failed to update fine' });
       }
     } else {
       res.json({ message: 'Successfully updated fine', fine });

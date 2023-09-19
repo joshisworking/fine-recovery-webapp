@@ -23,14 +23,14 @@ const getSubject = (id, callback) => {
       if (results.length === 0) {
         callback(new Error('Subject not found'), null);
       } else {
-        callback(null, results);
+        callback(null, results[0]);
       }
     }
   });
 };
 
 const getSubjectByName = (searchString, callback) => {
-  const sql = 'SELECT SubjectId, Name FROM SUBJECT WHERE NAME LIKE ?';
+  const sql = 'SELECT subjectId, name FROM SUBJECT WHERE NAME LIKE ?';
   db.query(sql, searchString, (err, results) => {
     console.log(query);
     if (err) {
@@ -59,6 +59,26 @@ const addSubject = (subject, callback) => {
   });
 };
 
+const updateSubject = (subject, callback) => {
+  const sql = 'UPDATE Subject SET name = ?, dob = ? WHERE subjectId = ?;';
+  db.query(
+    sql,
+    [subject.name, subject.dob, subject.subjectId],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing the query:', err.message);
+        callback(err, null);
+      } else {
+        if (results.affectedRows === 0) {
+          callback(new Error('Subject not found'));
+        } else {
+          callback(null);
+        }
+      }
+    }
+  );
+};
+
 const deleteSubject = (id, callback) => {
   const sql = 'DELETE FROM Subject WHERE subjectId = ?';
   db.query(sql, id, (err, result) => {
@@ -80,5 +100,6 @@ module.exports = {
   getSubject,
   addSubject,
   deleteSubject,
+  updateSubject,
   getSubjectByName,
 };

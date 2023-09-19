@@ -1,9 +1,11 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { Fine } from './Fines';
 import { Courthouse } from './Courthouses';
 import { useParams, useNavigate } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
 import ConfirmationModal from './ConfirmationModal';
+import ChangeSubjectModal from './ChangeSubjectModal';
+import { ShortSubject } from '../interfaces/iSubject';
+import { Fine } from '../interfaces/iFine';
 
 const FineDetails: React.FC = () => {
   setTitle('Fine details');
@@ -16,7 +18,7 @@ const FineDetails: React.FC = () => {
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [messageClassName, setMessageClassName] = useState('message');
-  // const messageDiv = document.getElementById('message')!;
+  const [showChangeSubjectModal, setShowChangeSubjectModal] = useState(false);
   const [fineDeleted, setFineDeleted] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState(
     'Are you sure you would like to delete this fine?'
@@ -103,10 +105,6 @@ const FineDetails: React.FC = () => {
     setMessageClassName('message fail');
   };
 
-  const setMessageSuccess = () => {
-    setMessageClassName('message success');
-  };
-
   const submitUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
     event.preventDefault();
     setMessage('');
@@ -191,12 +189,35 @@ const FineDetails: React.FC = () => {
       .then(data => console.log(data));
   };
 
-  const closeModal = () => {
+  const closeConfrimationModal = () => {
     if (fineDeleted) {
       navigateBackToFines();
     } else {
       setShowModal(!showModal);
     }
+  };
+
+  const closeSubjectModal = (subject: ShortSubject | null) => {
+    if (subject != null) {
+      const name = subject.name;
+      const id = subject.subjectId;
+
+      setFine(prevFine => {
+        return {
+          ...prevFine,
+          subjectId: id,
+          subjectName: name,
+        };
+      });
+    }
+    setShowChangeSubjectModal(!showChangeSubjectModal);
+  };
+
+  const handleChangeSubject: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+    event.preventDefault();
+    setShowChangeSubjectModal(true);
   };
 
   if (fine === null) {
@@ -292,6 +313,13 @@ const FineDetails: React.FC = () => {
                 value={fine.subjectName}
                 readOnly
               />
+
+              <button
+                className="btn-edit-subject"
+                type="button"
+                onClick={handleChangeSubject}>
+                <img src="../editing.png" />
+              </button>
             </div>
             <div className="input-wrapper">
               <label htmlFor="datePaid">Date Paid</label>
@@ -341,7 +369,12 @@ const FineDetails: React.FC = () => {
           title="Confirm delete fine"
           message={confirmationMessage}
           handleConfirm={deleteFine}
-          handleClose={closeModal}
+          handleClose={closeConfrimationModal}
+        />
+        <ChangeSubjectModal
+          show={showChangeSubjectModal}
+          handleClose={closeSubjectModal}
+          message=""
         />
       </>
     );

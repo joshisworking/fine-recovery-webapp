@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
-
-export type Fine = {
-  fineId?: number;
-  amount: number;
-  date: string;
-  courtFile: string;
-  courthouseId: number;
-  courthouseName: string;
-  subjectId?: number;
-  subjectName?: string;
-  datePaid: string | null;
-};
+import { Fine } from '../interfaces/iFine';
 
 const Fines: React.FC = () => {
   setTitle('Fines');

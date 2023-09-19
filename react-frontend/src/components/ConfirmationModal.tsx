@@ -17,6 +17,14 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 }) => {
   if (!show) return null;
 
+  const handleDelete = () => {
+    const button = document.getElementById('delete-fine');
+    if (button) {
+      button.style.display = 'none';
+    }
+    handleConfirm();
+  };
+
   return createPortal(
     <>
       <div
@@ -33,8 +41,9 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           <main className="modal-body">{message}</main>
           <footer className="modal-footer">
             <button
+              id="delete-fine"
               className="save"
-              onClick={handleConfirm}>
+              onClick={handleDelete}>
               Delete
             </button>
             <button

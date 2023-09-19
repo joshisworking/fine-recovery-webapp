@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
             </li>
             <li className="nav-item">
               <NavLink
-                to="/subjects"
+                to="/subject"
                 className={getNavLinkClassName}>
                 Subjects
               </NavLink>

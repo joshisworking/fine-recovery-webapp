@@ -48,11 +48,26 @@ router.get('/subject/:id', (req, res) => {
 
 router.post('/subject', (req, res) => {
   const subject = req.body;
-  controller.addSubject(subject, (err, subjectID) => {
+  controller.addSubject(subject, (err, subjectId) => {
     if (err) {
       res.status(400).json({ message: 'Error: Failed to add subject' });
     } else {
-      res.json({ message: 'Subject successfully added', subjectID });
+      res.json({ message: 'Subject successfully added', subjectId });
+    }
+  });
+});
+
+router.put('/subject', (req, res) => {
+  const subject = req.body;
+  controller.updateSubject(subject, err => {
+    if (err) {
+      if (err.message === 'Subject not found') {
+        res.status(404).json({ message: 'Subject not found' });
+      } else {
+        res.status(400).json({ message: 'Error: Failed to update subject' });
+      }
+    } else {
+      res.json({ message: 'Successfully updated subject', subject });
     }
   });
 });

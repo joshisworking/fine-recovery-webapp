@@ -4,6 +4,7 @@ import Fines from './components/Fines';
 import FineDetails from './components/FineDetails';
 import Subjects from './components/Subjects';
 import Courthouses from './components/Courthouses';
+import SubjectDetails from './components/SubjectDetails';
 
 const router = createBrowserRouter([
   {
@@ -26,8 +27,12 @@ const router = createBrowserRouter([
         element: <Courthouses />,
       },
       {
-        path: '/subjects',
+        path: '/subject',
         element: <Subjects />,
+      },
+      {
+        path: '/subject/:id',
+        element: <SubjectDetails />,
       },
     ],
   },

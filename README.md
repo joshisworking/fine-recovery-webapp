@@ -4,8 +4,6 @@
 
 This project is a work in progress, aiming to create a Simulated Fine Recovery System for managing court fines and payments. It simulates the process of tracking and recovering fines for different subjects (individuals or entities) within various courthouses.
 
-**Note**: The frontend part of the application has not yet been completed.
-
 ## Technologies Used
 
 - Backend: Node.js, Express.js
