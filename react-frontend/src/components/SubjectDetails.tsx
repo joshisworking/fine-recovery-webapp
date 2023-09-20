@@ -1,8 +1,9 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-
 import { useNavigate, useParams } from 'react-router-dom';
 import { Subject } from '../interfaces/iSubject';
 import ConfirmationModal from './ConfirmationModal';
+import { Fine } from '../interfaces/iFine';
+import FinesTable from './FinesTable';
 
 const SubjectDetails: React.FC = () => {
   const { id } = useParams();
@@ -17,8 +18,11 @@ const SubjectDetails: React.FC = () => {
   const [confirmationMessage, setConfirmationMessage] = useState(
     'Are you sure you would like to delete this subject?'
   );
+  const [fines, setFines] = useState<Fine[] | null>(null);
+  const [fineMessage, setFineMessage] = useState('');
 
   const subjectUrl = 'http://localhost:5000/subject/';
+  const fineUrl = 'http://localhost:5000/fine/subject/';
 
   const navigateBackToSubjects = () => {
     navigate('/subject');
@@ -32,12 +36,13 @@ const SubjectDetails: React.FC = () => {
   }
 
   const fetchSubject = () => {
+    let subjectFound = false;
     if (id != 'add') {
-      setExistingSubject(true);
-      console.log(id);
+      subjectFound = true;
+      setExistingSubject(subjectFound);
+
       fetch(subjectUrl + id)
         .then(response => {
-          console.log('response received');
           if (!response.ok) {
             setMessage('Error: Subject with Id: ' + id + ' not found.');
           }
@@ -45,12 +50,22 @@ const SubjectDetails: React.FC = () => {
         })
         .then(data => {
           if (data.message !== 'Error: Subject not found') {
-            console.log(data);
             setSubject(data);
           }
         });
     } else {
       setBlankSubject();
+    }
+
+    // Get the subject's fines
+    if (subjectFound) {
+      fetch(`${fineUrl}${id}`)
+        .then(response => response.json())
+        .then(data => {
+          if (!data.message) {
+            setFines(data);
+          }
+        });
     }
   };
 
@@ -78,7 +93,7 @@ const SubjectDetails: React.FC = () => {
     setMessage('');
 
     if (subject === null) {
-      setMessage('Error: Fine cannot be saved. Please try again later.');
+      setMessage('Error: Subject cannot be saved. Please reload and try again');
       setMessageFail();
       return;
     } else if (subject.name == null || subject.name.trim() === '') {
@@ -108,7 +123,6 @@ const SubjectDetails: React.FC = () => {
         return response.json();
       })
       .then(data => {
-        console.log(data);
         setSubject(prevSub => {
           return {
             ...prevSub,
@@ -132,10 +146,10 @@ const SubjectDetails: React.FC = () => {
         if (response.ok) {
           setSubjectDeleted(true);
           message =
-            'Fine successfully deleted. Close this box to return to fines.';
+            'Subject successfully deleted. Close this box to return to fines.';
           setMessageClassName('message success');
         } else {
-          message = 'Fine could not be deleted';
+          message = 'Subject could not be deleted';
           setMessageClassName('message fail');
         }
         setConfirmationMessage(message);
@@ -153,7 +167,7 @@ const SubjectDetails: React.FC = () => {
     }
   };
 
-  if (subject === null) {
+  if (subject == null) {
     return (
       <div
         className="message fail"
@@ -165,7 +179,7 @@ const SubjectDetails: React.FC = () => {
     return (
       <>
         <div className="form-container">
-          <h1>Subject Details</h1>
+          <h1>{subject.name}</h1>
           <form>
             <div className="input-wrapper">
               <label htmlFor="name">Name</label>
@@ -200,6 +214,11 @@ const SubjectDetails: React.FC = () => {
                 className="delete"
                 onClick={e => {
                   e.preventDefault();
+                  if (fines !== null) {
+                    setMessage('Error: Cannot delete subject if fines exist.');
+                    setMessageFail();
+                    return;
+                  }
                   setShowModal(!showModal);
                 }}>
                 Delete
@@ -220,6 +239,16 @@ const SubjectDetails: React.FC = () => {
           id="message">
           {message}
         </div>
+        <div className="fine-container">
+          <h2>Fines</h2>
+          <p className="message fail">{fineMessage}</p>
+          {fines == null ? (
+            <p>No fines for selected subject</p>
+          ) : (
+            <FinesTable fines={fines} />
+          )}
+        </div>
+
         <ConfirmationModal
           show={showModal}
           title="Confirm delete fine"

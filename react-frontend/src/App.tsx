@@ -5,6 +5,7 @@ import FineDetails from './components/FineDetails';
 import Subjects from './components/Subjects';
 import Courthouses from './components/Courthouses';
 import SubjectDetails from './components/SubjectDetails';
+import CourthouseDetails from './components/CourthouseDetails';
 
 const router = createBrowserRouter([
   {
@@ -23,8 +24,12 @@ const router = createBrowserRouter([
         element: <FineDetails />,
       },
       {
-        path: '/courthouses',
+        path: '/courthouse',
         element: <Courthouses />,
+      },
+      {
+        path: '/courthouse/:id',
+        element: <CourthouseDetails />,
       },
       {
         path: '/subject',

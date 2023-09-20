@@ -54,8 +54,14 @@ const updateFine = `
 const deleteFine = 'DELETE FROM FINE WHERE fineId = ?;';
 
 const finesBysubjectId = `
-  SELECT FINE.fineId, FINE.amount, FINE.date, FINE.courtFile,
-    COURTHOUSE.courthouseId, COURTHOUSE.City,
+  SELECT 
+    FINE.fineId, 
+    FINE.amount, 
+    FINE.date, 
+    FINE.courtFile,
+    COURTHOUSE.courthouseId, 
+    COURTHOUSE.Name as courthouseName,
+    COURTHOUSE.City,
     SUBJECT.Name AS subjectName
   FROM FINE
   LEFT JOIN COURTHOUSE ON FINE.courthouseId = COURTHOUSE.courthouseId
@@ -64,9 +70,16 @@ const finesBysubjectId = `
 `;
 
 const finesBycourthouseId = `
-  SELECT FINE.fineId, FINE.amount, FINE.date, FINE.courtFile,
-    COURTHOUSE.name AS courthouseName, COURTHOUSE.City, COURTHOUSE.Province,
-    SUBJECT.subjectId, SUBJECT.Name AS subjectName
+  SELECT 
+    FINE.fineId, 
+    FINE.amount, 
+    FINE.date, 
+    FINE.courtFile,
+    COURTHOUSE.name AS courthouseName, 
+    COURTHOUSE.City, 
+    COURTHOUSE.Province,
+    SUBJECT.subjectId, 
+    SUBJECT.Name AS subjectName
   FROM FINE
   LEFT JOIN COURTHOUSE ON FINE.courthouseId = COURTHOUSE.courthouseId
   LEFT JOIN SUBJECT ON FINE.subjectId = SUBJECT.subjectId

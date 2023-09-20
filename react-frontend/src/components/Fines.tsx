@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
 import { Fine } from '../interfaces/iFine';
+import FinesTable from './FinesTable';
 
 const Fines: React.FC = () => {
   setTitle('Fines');
@@ -74,41 +75,7 @@ const Fines: React.FC = () => {
         </form>
         <Link to="/fine/add">Add fine</Link>
       </div>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Fine ID</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Court File</th>
-              <th>Courthouse</th>
-              <th>Subject</th>
-              <th>Date Paid</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredFines.map(fine => (
-              <tr key={fine.fineId}>
-                <td>
-                  <Link
-                    className="table-edit-link"
-                    to={'/fine/' + fine.fineId}>
-                    Edit
-                  </Link>
-                  {fine.fineId}
-                </td>
-                <td>${fine.amount}</td>
-                <td>{fine.date}</td>
-                <td>{fine.courtFile}</td>
-                <td>{fine.courthouseName}</td>
-                <td>{fine.subjectName}</td>
-                <td>{fine.datePaid || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <FinesTable fines={filteredFines} />
     </>
   );
 };

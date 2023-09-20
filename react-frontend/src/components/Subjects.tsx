@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Subject } from '../interfaces/iSubject';
 import { Link, useNavigate } from 'react-router-dom';
+import SubjectsTable from './SubjectsTable';
 
 const Subjects: React.FC = () => {
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
@@ -10,8 +11,6 @@ const Subjects: React.FC = () => {
   useEffect(() => {
     document.title = 'Subjects';
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:5000/subject')
@@ -56,29 +55,7 @@ const Subjects: React.FC = () => {
         </form>
         <Link to="/subject/add">Add subject</Link>
       </div>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Subject ID</th>
-              <th>Name</th>
-              <th>DOB</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredSubjects.map(subject => (
-              <tr
-                key={subject.subjectId}
-                onClick={() => navigate(`/subject/${subject.subjectId}`)}
-                className="table-row-clickable">
-                <td>{subject.subjectId}</td>
-                <td>{subject.name}</td>
-                <td>{subject.dob}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <SubjectsTable subjects={filteredSubjects} />
     </>
   );
 };

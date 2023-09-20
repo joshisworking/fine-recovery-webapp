@@ -43,7 +43,7 @@ router.get('/fine/subject/:id', (req, res) => {
     if (err) {
       if (err.message === 'No fines') {
         res.status(404).json({
-          message: 'No fines for selected courthouse or courthouse not found',
+          message: 'No fines for selected subject or subject not found',
         });
       } else {
         res.status(400).json({ message: 'Error: Failed to fetch fines' });

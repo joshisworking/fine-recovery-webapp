@@ -22,7 +22,7 @@ router.get('/courthouse/:id', (req, res) => {
         res.status(500).json({ error: 'Could not fetch courhouses' });
       }
     } else {
-      res.json(courthouse);
+      res.json(courthouse[0]);
     }
   });
 });

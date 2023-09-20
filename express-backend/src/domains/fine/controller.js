@@ -39,7 +39,7 @@ const getFinesOverdue = callback => {
 };
 
 const getFinesByCourthouse = (courthouseId, callback) => {
-  db.query(sql.finesByCourthouseId, courthouseId, (err, results) => {
+  db.query(sql.finesBycourthouseId, courthouseId, (err, results) => {
     if (err) {
       console.log('Error executing query: ', err);
       callback(err, null);
@@ -54,7 +54,7 @@ const getFinesByCourthouse = (courthouseId, callback) => {
 };
 
 const getFinesBySubject = (subjectId, callback) => {
-  db.query(sql.finesBySubjectId, subjectId, (err, results) => {
+  db.query(sql.finesBysubjectId, subjectId, (err, results) => {
     if (err) {
       console.log('Error executing query: ', err);
       callback(err, null);

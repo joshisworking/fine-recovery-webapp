@@ -125,6 +125,14 @@ tr:hover .table-edit-link {
   color: rgb(81, 132, 209);
 }
 
+.fine-container {
+  margin-left: 20px;
+}
+
+.fine-container h2 {
+  margin: 20px 0px;
+}
+
 /* Heading styling */
 
 .heading-container {
