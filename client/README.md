@@ -18,7 +18,7 @@ A web application for managing fines and courthouse information.
 
 ## Introduction
 
-React frontend for the Fine Rcovery Webapp provides an interface to view, edit, and update fine details, as well as manage courthouse data.
+React frontend for the Fine Recovery Webapp provides an interface to view, edit, and update fine details, as well as manage courthouse data.
 
 ## Features
 
