@@ -5,7 +5,7 @@ const controller = require('./controller');
 router.get('/courthouse', (req, res) => {
   controller.getCourthouses((err, courthouses) => {
     if (err) {
-      res.status(500).json({ error: 'Could not fetch courthouses' });
+      res.status(400).json({ error: 'Could not fetch courthouses' });
     } else {
       res.json(courthouses);
     }
@@ -19,7 +19,7 @@ router.get('/courthouse/:id', (req, res) => {
       if (err.message === 'Courthouse not found') {
         res.status(404).json({ error: 'Courthouse not found' });
       } else {
-        res.status(500).json({ error: 'Could not fetch courhouses' });
+        res.status(400).json({ error: 'Could not fetch courhouses' });
       }
     } else {
       res.json(courthouse[0]);
@@ -31,7 +31,7 @@ router.post('/courthouse', (req, res) => {
   const courthouse = req.body;
   controller.addCourthouse(courthouse, (err, courthouseId) => {
     if (err) {
-      res.status(500).json({ error: 'Could not add courthouse' });
+      res.status(400).json({ error: 'Could not add courthouse' });
     } else {
       res.json({ message: 'Successfully added courthouse', courthouseId });
     }
@@ -44,7 +44,7 @@ router.delete('/courthouse/:id', (req, res) => {
       if (err.message === 'Courthouse not found') {
         res.status(404).json({ message: 'Courthouse not found' });
       } else {
-        res.status(500).json({ error: 'Failed to delete courthouse' });
+        res.status(400).json({ error: 'Failed to delete courthouse' });
       }
     } else {
       res.json({ message: 'Successfully deleted courthouse' });
@@ -60,7 +60,7 @@ router.put('/courthouse', (req, res) => {
       if (err.message === 'Courthouse not found') {
         res.status(404).json({ message: 'Courthouse not found' });
       } else {
-        res.status(500).json({ error: 'Failed to update courthouse' });
+        res.status(400).json({ error: 'Failed to update courthouse' });
       }
     } else {
       res.json({ message: 'Successfully updated courthouse', courthouse });
