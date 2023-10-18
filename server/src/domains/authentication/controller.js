@@ -1,7 +1,7 @@
 const db = require('../../config/db');
 
-const login = (username, password, callback) => {
-  const sql = 'SELECT Username, Password FROM USER WHERE Username = ?;';
+const login = (username, callback) => {
+  const sql = 'SELECT * FROM USER WHERE Username = ?;';
 
   db.query(sql, username, (err, results) => {
     if (err) {
@@ -9,17 +9,16 @@ const login = (username, password, callback) => {
       callback(err, null);
     } else {
       if (results.length === 1) {
-        if (results[0].Password === password) {
-          callback(null, results);
-        }
+        callback(null, results);
+      } else {
+        callback(new Error('Invalid Username/Password combination'), null);
       }
-      callback(new Error('Invalid Username/Password combination'), null);
     }
   });
 };
 
 const register = (username, password, callback) => {
-  const sql = 'INSERT INTO USER (Username, Password) VALUES (?,?);';
+  const sql = 'INSERT INTO USER (username, password) VALUES (?,?);';
 
   db.query(sql, [username, password], (err, results) => {
     if (err) {

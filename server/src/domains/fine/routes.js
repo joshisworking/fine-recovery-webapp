@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
+const { validateToken } = require('../../../jwt/JWT');
 
 router.get('/fine', (req, res) => {
   controller.getFines((err, results) => {

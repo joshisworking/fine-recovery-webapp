@@ -22,11 +22,11 @@ DROP TABLE IF EXISTS `fines`.`USER` ;
 CREATE TABLE IF NOT EXISTS `fines`.`USER` (
   `userId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(100) NOT NULL,
+  `password` CHAR(60) NOT NULL,
+  `role` VARCHAR(10) NOT NULL DEFAULT 'user',
   PRIMARY KEY (`userId`),
   UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) VISIBLE,
-  UNIQUE INDEX `userName_UNIQUE` (`userName` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 

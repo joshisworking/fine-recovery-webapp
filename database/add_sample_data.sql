@@ -1,10 +1,4 @@
--- User data
-INSERT INTO `USER` (`username`, `email`)
-VALUES
-  ('JohnDoe', 'john.doe@example.com'),
-  ('JaneSmith', 'jane.smith@example.com'),
-  ('AlexBrown', 'alex.brown@example.com');
-
+USE `fines`;
 
 -- Courthouse data
 INSERT INTO `COURTHOUSE` (`name`, `city`, `province`)

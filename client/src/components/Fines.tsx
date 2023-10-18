@@ -13,10 +13,17 @@ const Fines: React.FC = () => {
   // Obtain fine data
   useEffect(() => {
     fetch('http://localhost:5000/fine')
-      .then(response => response.json())
-      .then((data: { results: Fine[] }) => {
-        setAllFines(data.results);
-        setFilteredFines(data.results);
+      .then(response => {
+        console.log(response);
+        return response.json();
+      })
+      .then(data => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          setAllFines(data.results);
+          setFilteredFines(data.results);
+        }
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);

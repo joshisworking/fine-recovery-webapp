@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { Courthouse } from './Courthouses';
+import { Courthouse } from '../interfaces/iCourthouse';
 import { useParams, useNavigate } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
 import ConfirmationModal from './ConfirmationModal';
