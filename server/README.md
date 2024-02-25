@@ -30,9 +30,15 @@ Server developed using Express
 - `POST /fine`: Add a new fine.
 - `PUT /fine/:id`: Update a fine.
 - `DELETE /fine/:id`: Delete a fine.
--
-- ## Getting Started
+
+## Getting Started
 
 1. Clone this repository.
-2. Install the required dependencies using `npm install`.
-3. Start the server using `npm start` in the '/server' directory.
+2. Create a `.env` file under `/server`. Add the following fields, replacing the brackets with the applicable values:
+   - DB_USER='[ DATABASE USERNAME ]'
+   - DB_PASSWORD='[ DATABASE PASSWORD ]'
+   - DB_HOST='[ DATABASE HOSTNAME ]'
+   - DB_NAME='[ NAME OF YOUR DATABASE ]'
+   - JWT_SECRET='[ ENTER ARBITRARY STRING FOR JWT SECRET ]'
+3. Install the required dependencies using `npm install`.
+4. Start the server using `npm start` in the '/server' directory.
