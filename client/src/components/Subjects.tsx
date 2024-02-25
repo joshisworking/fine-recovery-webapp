@@ -4,20 +4,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import SubjectsTable from './SubjectsTable';
 
 const Subjects: React.FC = () => {
-  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
-  const [filterText, setFilterText] = useState('');
-  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
-
   useEffect(() => {
     document.title = 'Subjects';
   });
+  const navigate = useNavigate();
+
+  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
+  const [filterText, setFilterText] = useState('');
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
+  const [message, setMessage] = useState('');
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/subject')
-      .then(response => response.json())
+    fetch('http://localhost:5000/subject', { credentials: 'include' })
+      .then(response => {
+        if (response.status == 403) {
+          navigate('/login');
+        }
+        return response.json();
+      })
       .then(data => {
-        setAllSubjects(data);
-        setFilteredSubjects(data);
+        if (data.error) {
+          setMessage('Error: You must log in to view data');
+          console.log(data);
+        } else {
+          setUserAuthenticated(true);
+          setAllSubjects(data);
+          setFilteredSubjects(data);
+        }
       })
       .catch(error => console.log('Error fetching data: ' + error));
   }, []);
@@ -38,7 +52,7 @@ const Subjects: React.FC = () => {
     }
   }, [filterText, allSubjects]);
 
-  return (
+  return userAuthenticated ? (
     <>
       <div className="heading-container">
         <h1 className="list-header">Subjects</h1>
@@ -57,6 +71,8 @@ const Subjects: React.FC = () => {
       </div>
       <SubjectsTable subjects={filteredSubjects} />
     </>
+  ) : (
+    <p className="message fail">{message}</p>
   );
 };
 

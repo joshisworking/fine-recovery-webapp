@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import setTitle from '../utils/setTitle';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { NavLink } from 'react-router-dom';
 
 const Login: React.FC = () => {
   setTitle('Login');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  //const navigate = useNavigate();
+  const [cookie, setCookie, removeCookie] = useCookies(['frpToken']);
+  const navigate = useNavigate();
   const loginUrl = 'http://localhost:5000/login';
+
+  // Delete token if logout
+  useEffect(() => {
+    if (window.location.href.toLowerCase().endsWith('logout')) {
+      removeCookie('frpToken');
+      navigate('/login');
+    }
+  }, []);
 
   const login = () => {
     if (username.trim() == '') {
@@ -30,32 +41,47 @@ const Login: React.FC = () => {
     fetch(loginUrl, requestOptions)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        if (data.token) {
+          setCookie('frpToken', data.token);
+          navigate('/fine');
+        }
       });
   };
 
   return (
     <main>
-      <h1>Login</h1>
-      <label htmlFor="username">Username</label>
-      <input
-        name="username"
-        id="username"
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button onClick={login}>Login</button>
-      <p className="message fail">{message}</p>
+      <div className="form-container">
+        <h1>Login</h1>
+        <div className="input-wrapper">
+          <label htmlFor="username">Username</label>
+          <input
+            name="username"
+            id="username"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+        <button onClick={login}>Login</button>
+        <p className="message fail">{message}</p>
+        <p className="alternate">
+          {cookie.frpToken ? '' : 'You must log in to view data.'}
+        </p>
+        <p className="alternate">
+          Don't have an account? <NavLink to="/register">Register</NavLink>
+        </p>
+      </div>
     </main>
   );
 };

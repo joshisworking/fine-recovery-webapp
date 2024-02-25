@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Fine } from '../interfaces/iFine';
 
 type FinesTableProps = {
@@ -7,6 +7,8 @@ type FinesTableProps = {
 
 const FinesTable: React.FC<FinesTableProps> = ({ fines }) => {
   const navigate = useNavigate();
+
+  console.log(fines);
 
   return (
     <div className="table-container">

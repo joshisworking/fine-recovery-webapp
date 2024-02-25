@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import setTitle from '../utils/setTitle';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
   setTitle('Register');
@@ -8,7 +8,7 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [passwordConf, setPasswordConf] = useState('');
   const [message, setMessage] = useState('');
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const registerUrl = 'http://localhost:5000/register';
 
   const registerUser = () => {
@@ -34,42 +34,63 @@ const Register: React.FC = () => {
     };
 
     fetch(registerUrl, requestOptions)
-      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        if (response.ok) {
+          alert(
+            'Your registrations was successful. You will be redirected to the login page'
+          );
+          navigate('/login');
+        }
+        return response.json();
+      })
       .then(data => {
+        setMessage(data.error);
         console.log(data);
       });
   };
 
   return (
     <main>
-      <h1>Login</h1>
-      <label htmlFor="username">Username</label>
-      <input
-        name="username"
-        id="username"
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <label htmlFor="passwordConf">Confirm Password</label>
-      <input
-        type="password"
-        name="passwordConf"
-        id="passwordConf"
-        value={passwordConf}
-        onChange={e => setPasswordConf(e.target.value)}
-      />
-      <button onClick={registerUser}>Register</button>
-      <p className="message fail">{message}</p>
+      <div className="form-container">
+        <h1>Register</h1>
+        <div className="input-wrapper">
+          <label htmlFor="username">Username</label>
+          <input
+            name="username"
+            id="username"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="passwordConf">Confirm Password</label>
+          <input
+            type="password"
+            name="passwordConf"
+            id="passwordConf"
+            value={passwordConf}
+            onChange={e => setPasswordConf(e.target.value)}
+          />
+        </div>
+        <button onClick={registerUser}>Register</button>
+        <p className="register-message fail">{message}</p>
+        <p className="alternate">
+          Already have an account? <NavLink to="/login">Login</NavLink>
+        </p>
+      </div>
     </main>
   );
 };

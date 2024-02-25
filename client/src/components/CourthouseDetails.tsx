@@ -1,8 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Courthouse } from '../interfaces/iCourthouse';
 import ConfirmationModal from './ConfirmationModal';
-import SubjectDetails from './SubjectDetails';
 import { Fine } from '../interfaces/iFine';
 import FinesTable from './FinesTable';
 
@@ -20,7 +19,6 @@ const CourthouseDetails: React.FC = () => {
     'Are you sure you would like to delete this courthouse?'
   );
   const [fines, setFines] = useState<Fine[] | null>(null);
-  const [fineMessage, setFineMessage] = useState('');
 
   const courthouseUrl = 'http://localhost:5000/courthouse/';
   const fineUrl = 'http://localhost:5000/fine/courthouse/';
@@ -33,7 +31,7 @@ const CourthouseDetails: React.FC = () => {
     setCourthouse({
       name: '',
       city: '',
-      province: '',
+      province: 'AB',
     });
   }
 
@@ -44,9 +42,12 @@ const CourthouseDetails: React.FC = () => {
       courthouseFound = true;
       setExistingCourthouse(courthouseFound);
 
-      fetch(`${courthouseUrl}${id}`)
+      fetch(`${courthouseUrl}${id}`, { credentials: 'include' })
         .then(response => {
           if (!response.ok) {
+            if (response.status == 403) {
+              navigate('/');
+            }
             setMessage('Error: Courthouse with Id: ' + id + ' not found.');
           }
           return response.json();
@@ -62,8 +63,13 @@ const CourthouseDetails: React.FC = () => {
 
     // Get the courthouse's fines
     if (courthouseFound) {
-      fetch(`${fineUrl}${id}`)
-        .then(response => response.json())
+      fetch(`${fineUrl}${id}`, { credentials: 'include' })
+        .then(response => {
+          if (response.status == 404) {
+            console.log('No fines at this courthouse');
+          }
+          return response.json();
+        })
         .then(data => {
           if (!data.message) {
             setFines(data);
@@ -81,6 +87,7 @@ const CourthouseDetails: React.FC = () => {
   ) => {
     const { name, value } = event.target;
 
+    // @ts-ignore
     setCourthouse(prevCourt => {
       return {
         ...prevCourt,
@@ -122,13 +129,19 @@ const CourthouseDetails: React.FC = () => {
 
     const requestOptions = {
       method: existingCourthouse ? 'PUT' : 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(courthouse),
     };
 
+    // @ts-ignore
     fetch(courthouseUrl, requestOptions)
       .then(response => {
         if (response.ok) {
+          if (!existingCourthouse) {
+            alert('Courthouse successfully added');
+            navigate('/courthouse');
+          }
           setMessageClassName('message success');
           setExistingCourthouse(true);
         } else {
@@ -137,6 +150,7 @@ const CourthouseDetails: React.FC = () => {
         return response.json();
       })
       .then(data => {
+        // @ts-ignore
         setCourthouse(prevCourt => {
           return {
             ...prevCourt,
@@ -151,15 +165,17 @@ const CourthouseDetails: React.FC = () => {
     setMessage('');
     let message = '';
     const requestOptions = {
+      credentials: 'include',
       method: 'DELETE',
     };
 
+    // @ts-ignore
     fetch(`${courthouseUrl}${id}`, requestOptions)
       .then(response => {
         if (response.ok) {
           setCourthouseDeleted(true);
           message =
-            'Courthouse successfully deleted. Close this box to return to courthouses.';
+            'Courthouse successfully deleted. Close box to return to courthouses.';
           setMessageClassName('message success');
         } else {
           message = 'Courthouse could not be deleted';
@@ -192,7 +208,7 @@ const CourthouseDetails: React.FC = () => {
     return (
       <>
         <div className="form-container">
-          <h1>{courthouse.name}</h1>
+          <h1>{id == 'add' ? 'Add Courthouse' : courthouse.name}</h1>
           <form>
             <div className="input-wrapper">
               <label htmlFor="name">Name</label>
@@ -299,7 +315,7 @@ const CourthouseDetails: React.FC = () => {
                 className="delete"
                 onClick={e => {
                   e.preventDefault();
-                  if (fines !== null) {
+                  if (fines?.length !== 0) {
                     setMessage(
                       'Error: Cannot delete courthouse if fines exist.'
                     );
@@ -326,15 +342,18 @@ const CourthouseDetails: React.FC = () => {
           id="message">
           {message}
         </div>
-        <div className="fine-container">
-          <h2>Fines</h2>
-          <p className="message fail">{fineMessage}</p>
-          {fines == null ? (
-            <p>No fines for selected subject</p>
-          ) : (
-            <FinesTable fines={fines} />
-          )}
-        </div>
+        {existingCourthouse ? (
+          <div className="fine-container">
+            <h2>Fines</h2>
+            {fines == null || fines?.length === 0 ? (
+              <p>No fines for selected courthouse</p>
+            ) : (
+              <FinesTable fines={fines} />
+            )}
+          </div>
+        ) : (
+          ''
+        )}
         <ConfirmationModal
           show={showModal}
           title="Confirm delete fine"

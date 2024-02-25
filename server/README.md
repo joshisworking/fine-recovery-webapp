@@ -1,4 +1,6 @@
-# Express Backend
+# Fine Management System - Server
+
+Server developed using Express
 
 ## Routes
 
@@ -33,4 +35,4 @@
 
 1. Clone this repository.
 2. Install the required dependencies using `npm install`.
-3. Start the server using `npm start` in the '/express-backend' directory.
+3. Start the server using `npm start` in the '/server' directory.

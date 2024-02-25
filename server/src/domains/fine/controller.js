@@ -45,7 +45,7 @@ const getFinesByCourthouse = (courthouseId, callback) => {
       callback(err, null);
     } else {
       if (results.length === 0) {
-        callback(new Error('No fines'), null);
+        callback(null, results);
       } else {
         callback(null, results);
       }
@@ -60,7 +60,7 @@ const getFinesBySubject = (subjectId, callback) => {
       callback(err, null);
     } else {
       if (results.length === 0) {
-        callback(new Error('No fines'), null);
+        callback(null, results);
       } else {
         callback(null, results);
       }

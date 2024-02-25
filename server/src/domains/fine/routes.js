@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('./controller');
 const { validateToken } = require('../../../jwt/JWT');
 
-router.get('/fine', (req, res) => {
+router.get('/fine', validateToken, (req, res) => {
   controller.getFines((err, results) => {
     if (err) {
       res.status(400).json({ message: 'Error: Failed to fetch fines' });
@@ -13,7 +13,7 @@ router.get('/fine', (req, res) => {
   });
 });
 
-router.get('/fine/overdue', (req, res) => {
+router.get('/fine/overdue', validateToken, (req, res) => {
   controller.getFinesOverdue((err, results) => {
     if (err) {
       res.status(400).json({ message: 'Error: Failed to fetch fines' });
@@ -23,23 +23,17 @@ router.get('/fine/overdue', (req, res) => {
   });
 });
 
-router.get('/fine/courthouse/:id', (req, res) => {
+router.get('/fine/courthouse/:id', validateToken, (req, res) => {
   controller.getFinesByCourthouse(req.params.id, (err, results) => {
     if (err) {
-      if (err.message === 'No fines') {
-        res.status(404).json({
-          message: 'No fines for selected courthouse or courthouse not found',
-        });
-      } else {
-        res.status(400).json({ message: 'Error: Failed to fetch fines' });
-      }
+      res.status(400).json({ message: 'Error: Failed to fetch fines' });
     } else {
       res.json(results);
     }
   });
 });
 
-router.get('/fine/subject/:id', (req, res) => {
+router.get('/fine/subject/:id', validateToken, (req, res) => {
   controller.getFinesBySubject(req.params.id, (err, results) => {
     if (err) {
       if (err.message === 'No fines') {
@@ -55,7 +49,7 @@ router.get('/fine/subject/:id', (req, res) => {
   });
 });
 
-router.post('/fine', (req, res) => {
+router.post('/fine', validateToken, (req, res) => {
   const fine = req.body;
   controller.addFine(fine, (err, fineId) => {
     if (err) {
@@ -66,7 +60,8 @@ router.post('/fine', (req, res) => {
   });
 });
 
-router.get('/fine/:id', (req, res) => {
+router.get('/fine/:id', validateToken, (req, res) => {
+  console.log(req);
   controller.getFine(req.params.id, (err, fine) => {
     if (err) {
       if (err.message === 'Fine not found') {
@@ -80,7 +75,7 @@ router.get('/fine/:id', (req, res) => {
   });
 });
 
-router.delete('/fine/:id', (req, res) => {
+router.delete('/fine/:id', validateToken, (req, res) => {
   controller.deleteFine(req.params.id, err => {
     if (err) {
       if (err.message === 'Fine not found') {
@@ -94,7 +89,7 @@ router.delete('/fine/:id', (req, res) => {
   });
 });
 
-router.put('/fine', (req, res) => {
+router.put('/fine', validateToken, (req, res) => {
   const fine = req.body;
   controller.updateFine(fine, err => {
     if (err) {

@@ -36,14 +36,18 @@ const SubjectDetails: React.FC = () => {
   }
 
   const fetchSubject = () => {
+    console.log('Existing subject: ' + existingSubject);
     let subjectFound = false;
     if (id != 'add') {
       subjectFound = true;
       setExistingSubject(subjectFound);
 
-      fetch(subjectUrl + id)
+      fetch(subjectUrl + id, { credentials: 'include' })
         .then(response => {
           if (!response.ok) {
+            if (response.status == 403) {
+              navigate('/');
+            }
             setMessage('Error: Subject with Id: ' + id + ' not found.');
           }
           return response.json();
@@ -59,7 +63,7 @@ const SubjectDetails: React.FC = () => {
 
     // Get the subject's fines
     if (subjectFound) {
-      fetch(`${fineUrl}${id}`)
+      fetch(`${fineUrl}${id}`, { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
           if (!data.message) {
@@ -76,6 +80,7 @@ const SubjectDetails: React.FC = () => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
+    // @ts-ignore
     setSubject(prevSub => {
       return {
         ...prevSub,
@@ -108,13 +113,19 @@ const SubjectDetails: React.FC = () => {
 
     const requestOptions = {
       method: existingSubject ? 'PUT' : 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(subject),
     };
 
+    // @ts-ignore
     fetch(subjectUrl, requestOptions)
       .then(response => {
         if (response.ok) {
+          if (!existingSubject) {
+            alert('Subject added!');
+            navigate('/subject');
+          }
           setMessageClassName('message success');
           setExistingSubject(true);
         } else {
@@ -123,6 +134,7 @@ const SubjectDetails: React.FC = () => {
         return response.json();
       })
       .then(data => {
+        // @ts-ignore
         setSubject(prevSub => {
           return {
             ...prevSub,
@@ -137,16 +149,19 @@ const SubjectDetails: React.FC = () => {
     setMessage('');
     let message = '';
     const url = 'http://localhost:5000/subject/' + subject?.subjectId;
+
     const requestOptions = {
+      credentials: 'include',
       method: 'DELETE',
     };
 
+    // @ts-ignore
     fetch(url, requestOptions)
       .then(response => {
         if (response.ok) {
           setSubjectDeleted(true);
           message =
-            'Subject successfully deleted. Close this box to return to fines.';
+            'Subject successfully deleted. Close box to return to fines.';
           setMessageClassName('message success');
         } else {
           message = 'Subject could not be deleted';
@@ -179,7 +194,7 @@ const SubjectDetails: React.FC = () => {
     return (
       <>
         <div className="form-container">
-          <h1>{subject.name}</h1>
+          <h1>{id == 'add' ? 'Add Subject' : subject.name}</h1>
           <form>
             <div className="input-wrapper">
               <label htmlFor="name">Name</label>
@@ -214,7 +229,7 @@ const SubjectDetails: React.FC = () => {
                 className="delete"
                 onClick={e => {
                   e.preventDefault();
-                  if (fines !== null) {
+                  if (fines?.length !== 0) {
                     setMessage('Error: Cannot delete subject if fines exist.');
                     setMessageFail();
                     return;
@@ -239,15 +254,19 @@ const SubjectDetails: React.FC = () => {
           id="message">
           {message}
         </div>
-        <div className="fine-container">
-          <h2>Fines</h2>
-          <p className="message fail">{fineMessage}</p>
-          {fines == null ? (
-            <p>No fines for selected subject</p>
-          ) : (
-            <FinesTable fines={fines} />
-          )}
-        </div>
+        {existingSubject ? (
+          <div className="fine-container">
+            <h2>Fines</h2>
+            <p className="message fail">{fineMessage}</p>
+            {fines?.length === 0 || fines == null ? (
+              <p>No fines for selected subject</p>
+            ) : (
+              <FinesTable fines={fines} />
+            )}
+          </div>
+        ) : (
+          ''
+        )}
 
         <ConfirmationModal
           show={showModal}

@@ -12,22 +12,28 @@ const createToken = user => {
 };
 
 const validateToken = (req, res, next) => {
-  const token = req.cookies['access-token'];
+  const token = req.cookies['frpToken'];
 
-  if (!token) return res.status(404).json({ error: 'User not authenticated' });
+  if (!token) {
+    console.log('Error: No token found.');
+    return res.status(403).json({ error: 'User not authenticated' });
+  }
 
   try {
     const validToken = verify(token, process.env.JWT_SECRET);
     if (validToken) {
       decodedToken = decode(token);
-      console.log(decodedToken);
+      // console.log(decodedToken);
       req.role = decodedToken.role;
       req.username = decodedToken.username;
+      console.log('Token valid.');
       next();
-    } else return res.status(404).json({ error: 'User not autenticated' });
+    } else {
+      console.log('Error: Token not valid');
+      return res.status(403).json({ error: 'User not autenticated' });
+    }
   } catch (err) {
-    console.log(err);
-    return res.status(400).json({ error: err });
+    return res.status(403).json({ error: err });
   }
 };
 

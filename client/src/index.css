@@ -46,10 +46,28 @@ h1 {
   list-style: none;
 }
 
+.nav-item-end {
+  /* position: absolute; */
+  float: right;
+  list-style: none;
+  text-decoration: none;
+}
+
 .nav-link {
   color: #333;
   transition: color 0.2s ease;
   text-decoration: none;
+}
+
+.navbar-end {
+  margin-left: auto;
+}
+
+.nav-link-end {
+  float: right;
+  font-size: 12pt;
+  text-decoration: none;
+  color: #333;
 }
 
 .nav-link:hover {
@@ -58,6 +76,10 @@ h1 {
 
 .active {
   color: #fff;
+}
+
+.alternate {
+  margin-top: 1em;
 }
 
 button {
@@ -158,7 +180,11 @@ form p {
 }
 
 .message {
-  margin-left: 25px;
+  margin-left: 20px;
+}
+
+.register-message {
+  margin-top: 15px;
 }
 
 .success {

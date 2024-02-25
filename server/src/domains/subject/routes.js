@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
+const { validateToken } = require('../../../jwt/JWT');
 
-router.get('/subject', (req, res) => {
+router.get('/subject', validateToken, (req, res) => {
   const searchString = req.query.search;
   if (searchString) {
     controller.getSubjectByName('%' + searchString + '%', (err, subjects) => {
@@ -31,7 +32,7 @@ router.get('/subject', (req, res) => {
   }
 });
 
-router.get('/subject/:id', (req, res) => {
+router.get('/subject/:id', validateToken, (req, res) => {
   const id = req.params.id;
   controller.getSubject(id, (err, subject) => {
     if (err) {
@@ -46,7 +47,19 @@ router.get('/subject/:id', (req, res) => {
   });
 });
 
-router.post('/subject', (req, res) => {
+router.get('/subject/exists', validateToken, (req, res) => {
+  const subject = req.body;
+
+  controller.subjectExists(subject, (err, subjectExists) => {
+    if (err) {
+      res.status(500).json({ message: 'Error: Failed to check subjects' });
+    } else {
+      res.json({ subjectExists: true });
+    }
+  });
+});
+
+router.post('/subject', validateToken, (req, res) => {
   const subject = req.body;
   controller.addSubject(subject, (err, subjectId) => {
     if (err) {
@@ -57,7 +70,7 @@ router.post('/subject', (req, res) => {
   });
 });
 
-router.put('/subject', (req, res) => {
+router.put('/subject', validateToken, (req, res) => {
   const subject = req.body;
   controller.updateSubject(subject, err => {
     if (err) {
@@ -72,7 +85,7 @@ router.put('/subject', (req, res) => {
   });
 });
 
-router.delete('/subject/:id', (req, res) => {
+router.delete('/subject/:id', validateToken, (req, res) => {
   id = req.params.id;
 
   controller.deleteSubject(id, err => {

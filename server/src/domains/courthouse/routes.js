@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
+const { validateToken } = require('../../../jwt/JWT');
 
-router.get('/courthouse', (req, res) => {
+router.get('/courthouse', validateToken, (req, res) => {
   controller.getCourthouses((err, courthouses) => {
     if (err) {
       res.status(400).json({ error: 'Could not fetch courthouses' });
@@ -12,7 +13,7 @@ router.get('/courthouse', (req, res) => {
   });
 });
 
-router.get('/courthouse/:id', (req, res) => {
+router.get('/courthouse/:id', validateToken, (req, res) => {
   const id = req.params.id;
   controller.getCourthouse(id, (err, courthouse) => {
     if (err) {
@@ -27,7 +28,7 @@ router.get('/courthouse/:id', (req, res) => {
   });
 });
 
-router.post('/courthouse', (req, res) => {
+router.post('/courthouse', validateToken, (req, res) => {
   const courthouse = req.body;
   controller.addCourthouse(courthouse, (err, courthouseId) => {
     if (err) {
@@ -38,7 +39,7 @@ router.post('/courthouse', (req, res) => {
   });
 });
 
-router.delete('/courthouse/:id', (req, res) => {
+router.delete('/courthouse/:id', validateToken, (req, res) => {
   controller.deleteCourthouse(req.params.id, err => {
     if (err) {
       if (err.message === 'Courthouse not found') {
@@ -52,7 +53,7 @@ router.delete('/courthouse/:id', (req, res) => {
   });
 });
 
-router.put('/courthouse', (req, res) => {
+router.put('/courthouse', validateToken, (req, res) => {
   const courthouse = req.body;
   console.log(courthouse);
   controller.updateCourthouse(courthouse, err => {

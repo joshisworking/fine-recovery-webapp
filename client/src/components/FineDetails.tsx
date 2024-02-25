@@ -8,11 +8,12 @@ import { ShortSubject } from '../interfaces/iSubject';
 import { Fine } from '../interfaces/iFine';
 
 const FineDetails: React.FC = () => {
-  setTitle('Fine details');
-
   const { id } = useParams();
   const navigate = useNavigate();
 
+  id == 'add' ? setTitle('Add Fine') : setTitle('Fine Details');
+
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [courthouses, setCourthouses] = useState<Courthouse[] | null>(null);
   const [fine, setFine] = useState<Fine | null>(null);
   const [message, setMessage] = useState('');
@@ -34,7 +35,7 @@ const FineDetails: React.FC = () => {
     setFine({
       amount: 0,
       date: new Date().toISOString().substring(0, 10),
-      courthouseId: -1,
+      courthouseId: 0,
       courthouseName: '',
       courtFile: '',
       subjectName: '',
@@ -45,15 +46,21 @@ const FineDetails: React.FC = () => {
   const fetchFine = () => {
     if (id != 'add') {
       setExistingFine(true);
-      fetch('http://localhost:5000/fine/' + id)
+      fetch('http://localhost:5000/fine/' + id, { credentials: 'include' })
         .then(response => {
           if (!response.ok) {
-            setMessage('Error: Fine with Id: ' + id + ' not found.');
+            if (response.status == 403) {
+              console.log(response);
+              navigate('/');
+            } else {
+              setMessage('Error: Fine with Id: ' + id + ' not found.');
+            }
           }
           return response.json();
         })
         .then(data => {
-          if (data.message !== 'Fine not found') {
+          if (data.message !== 'Fine not found' && !data.error) {
+            setUserAuthenticated(true);
             setFine(data);
           }
         });
@@ -66,32 +73,29 @@ const FineDetails: React.FC = () => {
   useEffect(fetchFine, [id]);
 
   useEffect(() => {
-    const testStorage = sessionStorage.getItem('courthouses');
-
-    if (testStorage) {
-      setCourthouses(JSON.parse(testStorage));
-    } else {
-      fetch('http://localhost:5000/courthouse')
-        .then(response => response.json())
-        .then(data => {
-          sessionStorage.setItem('courthouses', JSON.stringify(data));
-          setCourthouses(data);
-        });
-    }
+    fetch('http://localhost:5000/courthouse', { credentials: 'include' })
+      .then(response => response.json())
+      .then(data => {
+        setCourthouses(data);
+      });
   }, []);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
+    // @ts-ignore
     setFine(prevFine => {
       return {
         ...prevFine,
         [name]: value,
       };
     });
+    console.log(fine);
   };
 
   const handleCourthouseChange = (selectedName: string, selectedId: number) => {
+    console.log(selectedId);
+    // @ts-ignore
     setFine(prevFine => {
       return {
         ...prevFine,
@@ -99,6 +103,7 @@ const FineDetails: React.FC = () => {
         courthouseName: selectedName,
       };
     });
+    console.log(fine);
   };
 
   const setMessageFail = () => {
@@ -145,10 +150,12 @@ const FineDetails: React.FC = () => {
 
     const requestOptions = {
       method: existingFine ? 'PUT' : 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fine),
     };
 
+    // @ts-ignore
     fetch(fineUrl, requestOptions)
       .then(response => {
         if (response.ok) {
@@ -202,6 +209,7 @@ const FineDetails: React.FC = () => {
       const name = subject.name;
       const id = subject.subjectId;
 
+      // @ts-ignore
       setFine(prevFine => {
         return {
           ...prevFine,
@@ -229,12 +237,12 @@ const FineDetails: React.FC = () => {
       </div>
     );
   } else if (courthouses === null) {
-    return <div>Error: Courthouses could not be fetched</div>;
+    return <div>Error: Courthouses could not be found</div>;
   } else {
     return (
       <>
         <div className="form-container">
-          <h1>Fine Details</h1>
+          <h1>{id == 'add' ? 'Add Fine' : 'Fine Details'}</h1>
           <form>
             <div className="input-wrapper">
               <label htmlFor="fineId">Fine ID</label>

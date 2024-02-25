@@ -1,13 +1,10 @@
-# React Frontend
+# Fine Management System - Client
 
-# Fine Management System
-
-A web application for managing fines and courthouse information.
+A React web application for managing fines and courthouse information.
 
 ## Table of Contents
 
-- [React Frontend](#react-frontend)
-- [Fine Management System](#fine-management-system)
+- [Fine Management System - Client](#fine-management-system---client)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Features](#features)
@@ -39,8 +36,8 @@ To set up the frontend on your local machine:
 
 To run the application locally:
 
-1. Navigate to the frontend application: `cd react-frontend`
-2. Start the development server: `npm run dev`
+1. Navigate to the frontend application: `cd client`
+2. Start the development server: `npm start`
 3. Access the app in a web browser: `http://localhost:5173`
 
 ## Technologies
@@ -53,6 +50,6 @@ This project is built using the following technologies:
 
 ## Attributions
 
-"Archive, inbox Icon" by Afrian E. Prasetyo from Icon-icons.com is licensed under CC BY 4.0. To view a copy of the license, visit https://creativecommons.org/licenses/by/4.0
+Courthouse icon: [Law icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/law)
 
-[Modify icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/modify)
+Edit icon: [Modify icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/modify)

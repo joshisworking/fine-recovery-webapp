@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import setTitle from '../utils/setTitle';
 import { Fine } from '../interfaces/iFine';
 import FinesTable from './FinesTable';
 
 const Fines: React.FC = () => {
   setTitle('Fines');
+  const navigate = useNavigate();
+
   const [allFines, setAllFines] = useState<Fine[]>([]);
   const [filterText, setFilterText] = useState('');
   const [unpaidOnly, setUnpaidOnly] = useState(false);
+  const [message, setMessage] = useState('');
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
 
   // Obtain fine data
   useEffect(() => {
-    fetch('http://localhost:5000/fine')
+    fetch('http://localhost:5000/fine', { credentials: 'include' })
       .then(response => {
-        console.log(response);
+        if (response.status == 403) {
+          navigate('/login');
+        }
         return response.json();
       })
       .then(data => {
         if (data.error) {
-          console.log(data.error);
+          setMessage('Error: You must log in to view data');
         } else {
+          setUserAuthenticated(true);
           setAllFines(data.results);
           setFilteredFines(data.results);
         }
@@ -58,7 +65,7 @@ const Fines: React.FC = () => {
     }
   }, [filterText, allFines, unpaidOnly]);
 
-  return (
+  return userAuthenticated ? (
     <>
       <div className="heading-container">
         <h1 className="list-header">Fines</h1>
@@ -84,6 +91,8 @@ const Fines: React.FC = () => {
       </div>
       <FinesTable fines={filteredFines} />
     </>
+  ) : (
+    <p className="message fail">{message}</p>
   );
 };
 

@@ -42,7 +42,7 @@ const ChangeSubjectModal: React.FC<modalProps> = ({
     let resultsFound = false;
     setSubjectResultsList(null);
     const url = 'http://localhost:5000/subject?search=' + searchString;
-    fetch(url)
+    fetch(url, { credentials: 'include' })
       .then(response => {
         if (response.ok) {
           resultsFound = true;
@@ -52,8 +52,6 @@ const ChangeSubjectModal: React.FC<modalProps> = ({
         return response.json();
       })
       .then(data => {
-        console.log(data);
-
         if (resultsFound) {
           setSubjectResultsList(data);
           setSelectedSubjectId(data ? data[0].subjectId : null);

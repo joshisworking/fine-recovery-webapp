@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CourthousesTable from './CourthousesTable';
 import { Courthouse } from '../interfaces/iCourthouse';
+
 const Courthouses: React.FC = () => {
+  const navigate = useNavigate();
+
   const [allCourthouses, setAllCourthouses] = useState<Courthouse[]>([]);
   const [filterText, setFilterText] = useState('');
   const [filteredCourthouses, setFilteredCourthouses] = useState<Courthouse[]>(
     []
   );
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [message, setMessage] = useState('');
 
   const courthouseUrl = 'http://localhost:5000/courthouse';
 
@@ -16,11 +21,21 @@ const Courthouses: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetch(courthouseUrl)
-      .then(response => response.json())
+    fetch(courthouseUrl, { credentials: 'include' })
+      .then(response => {
+        if (response.status == 403) {
+          navigate('/login');
+        }
+        return response.json();
+      })
       .then(data => {
-        setAllCourthouses(data);
-        setFilteredCourthouses(data);
+        if (data.error) {
+          setMessage('Error: You must log in to view data');
+        } else {
+          setUserAuthenticated(true);
+          setAllCourthouses(data);
+          setFilteredCourthouses(data);
+        }
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
@@ -42,7 +57,7 @@ const Courthouses: React.FC = () => {
     }
   }, [filterText, allCourthouses]);
 
-  return (
+  return userAuthenticated ? (
     <>
       <div className="heading-container">
         <h1 className="list-header">Courthouses</h1>
@@ -61,6 +76,8 @@ const Courthouses: React.FC = () => {
       </div>
       <CourthousesTable courthouses={filteredCourthouses} />
     </>
+  ) : (
+    <p className="message fail">{message}</p>
   );
 };
 
