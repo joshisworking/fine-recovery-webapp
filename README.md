@@ -21,7 +21,7 @@ This project includes a `database` folder that contains the necessary files for 
 
 ## Sample Images
 
-Login with username and password generates a session JWT. Logout (available in nag bar once a user logs in) deletes the token and returns user to login page.
+Login with username and password generates a session JWT. Logout (available in nav bar once a user logs in) deletes the token and returns user to login page.
 
 ![Login page](/sample-images/login.png)
 
