@@ -1,21 +1,48 @@
-# Simulated Fine Recovery Project (Work in Progress)
+# Simulated Fine Recovery Project
 
 ## Overview
 
-This project is a work in progress, aiming to create a Simulated Fine Recovery System for managing court fines and payments. It simulates the process of tracking and recovering fines for different subjects (individuals or entities) within various courthouses.
+A basic Fine Recovery System for managing court fines and payments. It simulates the process of tracking and recovering fines for different subjects (individuals or entities) within various courthouses.
+
+The implementation is separated between client and server modules. The server is a simple REST API using Express. The client frontend is a React application, implemented with TypeScript. See [client](/client/README.md) and [server](/server/README.md) READMEs for more details.
+
+New users can register to use the application. Once logged in, a JSON Web Token is generated and sent to the server with each request. If valid, the server returns the data. Otherwise, the server returns a 403 response and the client sends the user to the login page.
 
 ## Technologies Used
 
 - Backend: Node.js, Express.js
 - Frontend: React with TypeScript
-- Authentication: JSON Web Tokens (JWT)
+- Authentication: JSON Web Token (JWT)
+
+## Instructions
+
+Prerequisites: This project uses Node.js and the npm package manager. To install Node.js, visit [nodejs.org](https://nodejs.org)
+
+1. Clone the repository
+2. Set up the database
+   1. Execute the statements in `fine-recovery-webapp/database/create_tables.sql` to create the `fines` database and its tables
+   2. Optionally, execute the statements in `fine-recovery-webapp/database/add_sample_data.sql` to add sample data
+3. Set up the Server
+   1. Create a `.env` file under the `fine-recovery-webapp/server` folder. Add the following fields, replacing the brackets with the applicable values:
+      - DB_USER='[ YOUR DATABASE USERNAME ]'
+      - DB_PASSWORD='[ YOUR DATABASE PASSWORD ]'
+      - DB_HOST='[ YOUR DATABASE HOSTNAME ]'
+      - DB_NAME='fines'
+      - JWT_SECRET='[ ENTER ARBITRARY STRING FOR JWT SECRET ]'
+   2. Open a terminal to `fine-recovery-webapp/server`
+   3. Install the required dependencies by running the `npm install` command
+   4. Start the server using `npm start`
+4. Set up the client
+   1. Open a new terminal to `fine-recovery-webapp/client`
+   2. Install the required dependencies by running the `npm install` command
+   3. Start the client using `npm start`
 
 ## Database Setup
 
-This project includes a `database` folder that contains the necessary files for setting up the database:
+This project includes a `database` folder that contains the necessary files for setting up the database. MySQL was used for developing this project.
 
 - `create_tables.sql`: This file contains necessary SQL to create the tables for the fine recovery system.
-- `add_sample_data.sql`: For testing purposes, the `add_sample_data.sql` contains insert statements to populate the database with sample records.
+- `add_sample_data.sql`: Sample data to populate the database to begin testing.
 
 **Note**: The names and details used in the `add_sample_data.sql` file were generated programmatically and are fictional. They do not represent real individuals or entities.
 
@@ -53,11 +80,11 @@ Selecting a subject displays the subject details. Edits can be made to subject. 
 
 ![Subject details](/sample-images/subject-details.png)
 
-Courthouses diplays all courthouses and can be narrowed by search.
+Courthouses displays all courthouses and can be narrowed by search.
 
 ![Courthouses page](/sample-images/courthouses.png)
 
-Selecting a courthouse deplays the courthouse details. Edits can be made to courthouse. All fines related to courthouse are listed and can be selected to go to the fine details.
+Selecting a courthouse displays the courthouse details. Edits can be made to courthouse. All fines related to courthouse are listed and can be selected to go to the fine details.
 
 ![Courthouse details](/sample-images/courthouse-details.png)
 

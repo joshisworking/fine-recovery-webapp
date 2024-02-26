@@ -1,6 +1,16 @@
-# Fine Management System - Server
+# Fine Recovery System - Server
 
-Server developed using Express
+Server developed using Express. The server runs on port 5000.
+
+## Table of Contents
+
+- [Fine Recovery System - Server](#fine-recovery-system---server)
+  - [Table of Contents](#table-of-contents)
+  - [Routes](#routes)
+    - [Courthouse](#courthouse)
+    - [Subject](#subject)
+    - [Fine](#fine)
+  - [Getting Started](#getting-started)
 
 ## Routes
 
@@ -34,11 +44,12 @@ Server developed using Express
 ## Getting Started
 
 1. Clone this repository.
-2. Create a `.env` file under `/server`. Add the following fields, replacing the brackets with the applicable values:
+2. Create a `.env` file under `fine-recovery-webapp/server`. Add the following fields, replacing the brackets with the applicable values:
    - DB_USER='[ DATABASE USERNAME ]'
    - DB_PASSWORD='[ DATABASE PASSWORD ]'
    - DB_HOST='[ DATABASE HOSTNAME ]'
    - DB_NAME='[ NAME OF YOUR DATABASE ]'
    - JWT_SECRET='[ ENTER ARBITRARY STRING FOR JWT SECRET ]'
-3. Install the required dependencies using `npm install`.
-4. Start the server using `npm start` in the '/server' directory.
+3. Open a terminal to the `fine-recovery-webapp/server` directory
+4. Install the required dependencies: `npm install`
+5. Start the server: `npm start`
