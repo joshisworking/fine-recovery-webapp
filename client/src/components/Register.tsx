@@ -35,7 +35,6 @@ const Register: React.FC = () => {
 
     fetch(registerUrl, requestOptions)
       .then(response => {
-        console.log(response);
         if (response.ok) {
           alert(
             'Your registrations was successful. You will be redirected to the login page'
@@ -46,7 +45,6 @@ const Register: React.FC = () => {
       })
       .then(data => {
         setMessage(data.error);
-        console.log(data);
       });
   };
 

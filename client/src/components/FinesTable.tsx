@@ -8,8 +8,6 @@ type FinesTableProps = {
 const FinesTable: React.FC<FinesTableProps> = ({ fines }) => {
   const navigate = useNavigate();
 
-  console.log(fines);
-
   return (
     <div className="table-container">
       <table>

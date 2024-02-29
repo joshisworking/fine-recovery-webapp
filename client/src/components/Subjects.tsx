@@ -26,7 +26,6 @@ const Subjects: React.FC = () => {
       .then(data => {
         if (data.error) {
           setMessage('Error: You must log in to view data');
-          console.log(data);
         } else {
           setUserAuthenticated(true);
           setAllSubjects(data);

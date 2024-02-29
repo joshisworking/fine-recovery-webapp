@@ -50,7 +50,6 @@ const FineDetails: React.FC = () => {
         .then(response => {
           if (!response.ok) {
             if (response.status == 403) {
-              console.log(response);
               navigate('/');
             } else {
               setMessage('Error: Fine with Id: ' + id + ' not found.');
@@ -90,11 +89,9 @@ const FineDetails: React.FC = () => {
         [name]: value,
       };
     });
-    console.log(fine);
   };
 
   const handleCourthouseChange = (selectedName: string, selectedId: number) => {
-    console.log(selectedId);
     // @ts-ignore
     setFine(prevFine => {
       return {
@@ -103,7 +100,6 @@ const FineDetails: React.FC = () => {
         courthouseName: selectedName,
       };
     });
-    console.log(fine);
   };
 
   const setMessageFail = () => {
@@ -178,22 +174,20 @@ const FineDetails: React.FC = () => {
       method: 'DELETE',
     };
 
-    fetch(url, requestOptions)
-      .then(response => {
-        if (response.ok) {
-          setFineDeleted(true);
-          message =
-            'Fine successfully deleted. Close this box to return to fines.';
-          setMessageClassName('message success');
-        } else {
-          message = 'Fine could not be deleted';
-          setMessageClassName('message fail');
-        }
-        setConfirmationMessage(message);
-        setMessage(message);
-        return response.json();
-      })
-      .then(data => console.log(data));
+    fetch(url, requestOptions).then(response => {
+      if (response.ok) {
+        setFineDeleted(true);
+        message =
+          'Fine successfully deleted. Close this box to return to fines.';
+        setMessageClassName('message success');
+      } else {
+        message = 'Fine could not be deleted';
+        setMessageClassName('message fail');
+      }
+      setConfirmationMessage(message);
+      setMessage(message);
+      return response.json();
+    });
   };
 
   const closeConfrimationModal = () => {

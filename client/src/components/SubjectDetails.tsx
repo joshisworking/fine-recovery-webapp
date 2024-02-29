@@ -36,7 +36,6 @@ const SubjectDetails: React.FC = () => {
   }
 
   const fetchSubject = () => {
-    console.log('Existing subject: ' + existingSubject);
     let subjectFound = false;
     if (id != 'add') {
       subjectFound = true;
@@ -156,22 +155,19 @@ const SubjectDetails: React.FC = () => {
     };
 
     // @ts-ignore
-    fetch(url, requestOptions)
-      .then(response => {
-        if (response.ok) {
-          setSubjectDeleted(true);
-          message =
-            'Subject successfully deleted. Close box to return to fines.';
-          setMessageClassName('message success');
-        } else {
-          message = 'Subject could not be deleted';
-          setMessageClassName('message fail');
-        }
-        setConfirmationMessage(message);
-        setMessage(message);
-        return response.json();
-      })
-      .then(data => console.log(data));
+    fetch(url, requestOptions).then(response => {
+      if (response.ok) {
+        setSubjectDeleted(true);
+        message = 'Subject successfully deleted. Close box to return to fines.';
+        setMessageClassName('message success');
+      } else {
+        message = 'Subject could not be deleted';
+        setMessageClassName('message fail');
+      }
+      setConfirmationMessage(message);
+      setMessage(message);
+      return response.json();
+    });
   };
 
   const closeConfrimationModal = () => {

@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { ShortSubject } from '../interfaces/iSubject';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 interface modalProps {
   show: Boolean;
@@ -25,7 +25,6 @@ const ChangeSubjectModal: React.FC<modalProps> = ({
     const subject = subjectResultsList?.find(subject => {
       return subject.subjectId === selectedSubjectId;
     });
-    console.log(subject);
     subject ? onCloseHandler(subject) : onCloseHandler(null);
   }
 
@@ -55,7 +54,6 @@ const ChangeSubjectModal: React.FC<modalProps> = ({
         if (resultsFound) {
           setSubjectResultsList(data);
           setSelectedSubjectId(data ? data[0].subjectId : null);
-          console.log(selectedSubjectId);
         }
       });
   };

@@ -39,7 +39,14 @@ const Login: React.FC = () => {
     };
 
     fetch(loginUrl, requestOptions)
-      .then(response => response.json())
+      .then(response => {
+        if (response.status == 400) {
+          setMessage('Invalid username/password combination.');
+        } else if (response.status == 500) {
+          setMessage('Server error. Please contact your administrator.');
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.token) {
           setCookie('frpToken', data.token);
@@ -61,6 +68,11 @@ const Login: React.FC = () => {
             placeholder="Username"
             value={username}
             onChange={e => setUsername(e.target.value)}
+            onKeyUp={e => {
+              if (e.key == 'Enter') {
+                login();
+              }
+            }}
           />
         </div>
         <div className="input-wrapper">
@@ -71,10 +83,15 @@ const Login: React.FC = () => {
             id="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            onKeyUp={e => {
+              if (e.key == 'Enter') {
+                login();
+              }
+            }}
           />
         </div>
         <button onClick={login}>Login</button>
-        <p className="message fail">{message}</p>
+        <p className="register-message fail">{message}</p>
         <p className="alternate">
           {cookie.frpToken ? '' : 'You must log in to view data.'}
         </p>

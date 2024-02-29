@@ -64,12 +64,7 @@ const CourthouseDetails: React.FC = () => {
     // Get the courthouse's fines
     if (courthouseFound) {
       fetch(`${fineUrl}${id}`, { credentials: 'include' })
-        .then(response => {
-          if (response.status == 404) {
-            console.log('No fines at this courthouse');
-          }
-          return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
           if (!data.message) {
             setFines(data);
@@ -170,22 +165,20 @@ const CourthouseDetails: React.FC = () => {
     };
 
     // @ts-ignore
-    fetch(`${courthouseUrl}${id}`, requestOptions)
-      .then(response => {
-        if (response.ok) {
-          setCourthouseDeleted(true);
-          message =
-            'Courthouse successfully deleted. Close box to return to courthouses.';
-          setMessageClassName('message success');
-        } else {
-          message = 'Courthouse could not be deleted';
-          setMessageClassName('message fail');
-        }
-        setConfirmationMessage(message);
-        setMessage(message);
-        return response.json();
-      })
-      .then(data => console.log(data));
+    fetch(`${courthouseUrl}${id}`, requestOptions).then(response => {
+      if (response.ok) {
+        setCourthouseDeleted(true);
+        message =
+          'Courthouse successfully deleted. Close box to return to courthouses.';
+        setMessageClassName('message success');
+      } else {
+        message = 'Courthouse could not be deleted';
+        setMessageClassName('message fail');
+      }
+      setConfirmationMessage(message);
+      setMessage(message);
+      return response.json();
+    });
   };
 
   const closeConfrimationModal = () => {
@@ -298,8 +291,8 @@ const CourthouseDetails: React.FC = () => {
                   Saskatchewan
                 </option>
                 <option
-                  key="YK"
-                  value="YK">
+                  key="YT"
+                  value="YT">
                   Yukon
                 </option>
               </select>
