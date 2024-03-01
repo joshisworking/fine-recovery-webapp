@@ -12,7 +12,7 @@ router.post('/login', (req, res) => {
 
   controller.login(userLogin.username, (err, userFound) => {
     if (err || userFound.length !== 1) {
-      res.status(400).json({ error: 'Invalid username/password combination' });
+      res.status(500).json({ error: 'Invalid username/password combination' });
     } else {
       bcrypt.compare(
         userLogin.password,

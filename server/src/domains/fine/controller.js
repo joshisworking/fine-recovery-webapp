@@ -100,7 +100,6 @@ const deleteFine = (id, callback) => {
 };
 
 const updateFine = (fine, callback) => {
-  console.log(fine);
   db.query(
     sql.updateFine,
     [

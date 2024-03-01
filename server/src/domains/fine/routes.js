@@ -61,7 +61,6 @@ router.post('/fine', validateToken, (req, res) => {
 });
 
 router.get('/fine/:id', validateToken, (req, res) => {
-  console.log(req);
   controller.getFine(req.params.id, (err, fine) => {
     if (err) {
       if (err.message === 'Fine not found') {

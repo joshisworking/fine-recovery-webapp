@@ -15,7 +15,6 @@ const validateToken = (req, res, next) => {
   const token = req.cookies['frpToken'];
 
   if (!token) {
-    console.log('Error: No token found.');
     return res.status(403).json({ error: 'User not authenticated' });
   }
 
@@ -23,13 +22,10 @@ const validateToken = (req, res, next) => {
     const validToken = verify(token, process.env.JWT_SECRET);
     if (validToken) {
       decodedToken = decode(token);
-      // console.log(decodedToken);
       req.role = decodedToken.role;
       req.username = decodedToken.username;
-      console.log('Token valid.');
       next();
     } else {
-      console.log('Error: Token not valid');
       return res.status(403).json({ error: 'User not autenticated' });
     }
   } catch (err) {

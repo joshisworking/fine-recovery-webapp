@@ -1,5 +1,18 @@
 # Simulated Fine Recovery Project
 
+## Table of Contents
+
+- [Simulated Fine Recovery Project](#simulated-fine-recovery-project)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Technologies Used](#technologies-used)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Database Setup](#database-setup)
+    - [Deployment](#deployment)
+  - [Sample Images](#sample-images)
+  - [License](#license)
+
 ## Overview
 
 A basic Fine Recovery System for managing court fines and payments. It simulates the process of tracking and recovering fines for different subjects (individuals or entities) within various courthouses.
@@ -14,9 +27,25 @@ New users can register to use the application. Once logged in, a JSON Web Token 
 - Frontend: React with TypeScript
 - Authentication: JSON Web Token (JWT)
 
-## Instructions
+## Getting Started
 
-Prerequisites: This project uses Node.js and the npm package manager. To install Node.js, visit [nodejs.org](https://nodejs.org)
+### Prerequisites
+
+- This project uses Node.js and the npm package manager. To install Node.js, visit [nodejs.org](https://nodejs.org)
+- A database server will be required. A community version of MySQL server can be installed from [mysql.com](https://dev.mysql.com/downloads/mysql/).
+  - If freshly installing the server, you may get a `ER_NOT_SUPPORTED_AUTH_MODE` error. Run the command `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'` (changing the values as appropriate) to resolve the error.
+- [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) or another tool of your choice can be used to execute the database set up files.
+
+### Database Setup
+
+This project includes a `database` folder that contains the necessary files for setting up the database. MySQL was used for developing this project.
+
+- `create_tables.sql`: This file contains necessary SQL to create the tables for the fine recovery system.
+- `add_sample_data.sql`: Sample data to populate the database to begin testing.
+
+**Note**: The names and details used in the `add_sample_data.sql` file were generated programmatically and are fictional. They do not represent real individuals or entities.
+
+### Deployment
 
 1. Clone the repository
 2. Set up the database
@@ -36,15 +65,6 @@ Prerequisites: This project uses Node.js and the npm package manager. To install
    1. Open a new terminal to `fine-recovery-webapp/client`
    2. Install the required dependencies by running the `npm install` command
    3. Start the client using `npm start`
-
-## Database Setup
-
-This project includes a `database` folder that contains the necessary files for setting up the database. MySQL was used for developing this project.
-
-- `create_tables.sql`: This file contains necessary SQL to create the tables for the fine recovery system.
-- `add_sample_data.sql`: Sample data to populate the database to begin testing.
-
-**Note**: The names and details used in the `add_sample_data.sql` file were generated programmatically and are fictional. They do not represent real individuals or entities.
 
 ## Sample Images
 
